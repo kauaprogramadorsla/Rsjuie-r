@@ -47,6 +47,11 @@
       margin-top: 10px;
     }
 
+    .google-btn {
+      background: #4285F4;
+      color: white;
+    }
+
     .area-votacao {
       display: none;
       padding: 20px;
@@ -112,7 +117,7 @@
 
 <body>
 
-<!-- LOGIN / CRIAR CONTA -->
+<!-- LOGIN -->
 <div class="card" id="loginArea">
   <h1>Entrar ou Criar Conta</h1>
 
@@ -121,6 +126,10 @@
 
   <button onclick="criarConta()">Criar Conta</button>
   <button onclick="login()">Entrar</button>
+
+  <button class="google-btn" onclick="loginGoogle()">
+    Entrar com Google
+  </button>
 
   <p id="erro"></p>
 </div>
@@ -158,6 +167,8 @@
     getAuth, 
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword,
+    signInWithPopup,
+    GoogleAuthProvider,
     onAuthStateChanged,
     signOut
   } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
@@ -176,11 +187,12 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
   const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
 
   // CRIAR CONTA
   window.criarConta = function () {
-    const email = email.value;
-    const senha = senha.value;
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
 
     createUserWithEmailAndPassword(auth, email, senha)
       .catch(error => {
@@ -188,12 +200,20 @@
       });
   };
 
-  // LOGIN
+  // LOGIN EMAIL
   window.login = function () {
-    const email = email.value;
-    const senha = senha.value;
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
 
     signInWithEmailAndPassword(auth, email, senha)
+      .catch(error => {
+        document.getElementById("erro").innerText = error.message;
+      });
+  };
+
+  // LOGIN GOOGLE
+  window.loginGoogle = function () {
+    signInWithPopup(auth, provider)
       .catch(error => {
         document.getElementById("erro").innerText = error.message;
       });
@@ -236,7 +256,7 @@
     set(votoRef, atual + 1);
   };
 
-  // RESULTADO AO VIVO
+  // RESULTADOS AO VIVO
   const votosRef = ref(db, "votos");
   onValue(votosRef, (snapshot) => {
     const dados = snapshot.val();
