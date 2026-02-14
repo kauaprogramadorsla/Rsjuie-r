@@ -11,48 +11,45 @@
       background: url("https://i.ibb.co/mCBrxzgs/Untitled770-20260214172706.png") no-repeat center center fixed;
       background-size: cover;
       color: white;
+      text-align: center;
     }
 
     h1, h2, p {
       text-shadow: 0 2px 5px rgba(0,0,0,0.7);
     }
 
-    /* BARRA SUPERIOR */
-    .topo {
-      display: flex;
-      gap: 15px;
-      padding: 10px;
-      overflow-x: auto;
-      background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.8),
-        rgba(0,0,0,0.3)
-      );
+    .card {
+      background: rgba(0,0,0,0.6);
+      padding: 25px;
+      border-radius: 20px;
+      max-width: 400px;
+      margin: 80px auto;
     }
 
-    .topo button {
-      min-width: 160px;
-      padding: 15px 20px;
+    input {
+      width: 90%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px 20px;
       border: none;
       border-radius: 15px;
       font-size: 18px;
       font-weight: bold;
       cursor: pointer;
-      color: white;
-      background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.6),
-        rgba(0,0,0,0)
-      );
-    }
-
-    .conteudo {
-      padding: 20px;
-      text-align: center;
+      background: white;
+      color: black;
+      margin-top: 10px;
     }
 
     .area-votacao {
       display: none;
+      padding: 20px;
     }
 
     .opcoes {
@@ -63,7 +60,6 @@
       margin: auto;
     }
 
-    /* RETÂNGULO DE VOTO */
     .botao-voto {
       display: flex;
       align-items: center;
@@ -76,14 +72,7 @@
       border-radius: 20px;
       cursor: pointer;
       color: black;
-      background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.25),
-        rgba(0,0,0,0)
-      ),
-      white;
-      transition: 0.2s;
-      position: relative;
+      background: white;
     }
 
     .botao-voto img {
@@ -97,78 +86,32 @@
       outline: 4px solid #6b3e2e;
     }
 
-    /* BOTÃO CONFIRMAR */
     .confirmar {
       margin-top: 25px;
-      padding: 10px 20px;
+      padding: 12px 20px;
       border-radius: 20px;
       background: white;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
       color: black;
+      cursor: pointer;
       font-weight: bold;
-    }
-
-    .bola {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: gray;
-      transition: 0.2s;
-    }
-
-    .bola.ativa {
-      background: limegreen;
-    }
-
-    /* TELA DE CONFIRMAÇÃO */
-    .tela-confirmacao {
-      display: none;
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    .cartao-confirmacao {
-      background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.25),
-        rgba(0,0,0,0)
-      ),
-      white;
-      color: black;
-      border-radius: 20px;
-      padding: 20px;
-      max-width: 400px;
-      margin: auto;
-    }
-
-    .cartao-confirmacao img {
-      width: 120px;
-      height: 120px;
-      border-radius: 15px;
-      object-fit: cover;
-    }
-
-    .btn-voltar {
-      margin-top: 20px;
-      padding: 12px 25px;
-      border: none;
-      border-radius: 15px;
-      font-size: 18px;
-      cursor: pointer;
+      display: inline-block;
     }
   </style>
 </head>
 
 <body>
 
-<div class="topo">
-  <button onclick="abrirVotacao()">Votação</button>
+<!-- LOGIN -->
+<div class="card" id="loginArea">
+  <h1>Login</h1>
+  <input type="email" id="email" placeholder="E-mail">
+  <input type="password" id="senha" placeholder="Senha">
+  <button onclick="login()">Entrar</button>
+  <p id="erro"></p>
 </div>
 
-<div class="conteudo area-votacao" id="areaVotacao">
+<!-- VOTAÇÃO -->
+<div class="area-votacao" id="areaVotacao">
   <h1>Vote em quem deve sair</h1>
 
   <div class="opcoes">
@@ -184,7 +127,6 @@
   </div>
 
   <div class="confirmar" onclick="confirmarVoto()">
-    <div class="bola" id="bola"></div>
     Confirmar voto
   </div>
 
@@ -192,61 +134,80 @@
   <p id="resultado"></p>
 </div>
 
-<!-- TELA APÓS VOTO -->
-<div class="tela-confirmacao" id="telaConfirmacao">
-  <div class="cartao-confirmacao">
-    <img id="fotoConfirmacao" src="">
-    <h2 id="nomeConfirmacao"></h2>
-  </div>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+  import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
-  <button class="btn-voltar" onclick="voltarVotacao()">
-    Votar novamente
-  </button>
-</div>
+  // SEU FIREBASE CONFIG (já colocado)
+  const firebaseConfig = {
+    apiKey: "AIzaSyC8PSXTyOxn_kgyFzpn-Qw3EGUXdS7BGOo",
+    authDomain: "feature-8e659.firebaseapp.com",
+    databaseURL: "https://feature-8e659-default-rtdb.firebaseio.com",
+    projectId: "feature-8e659",
+    storageBucket: "feature-8e659.firebasestorage.app",
+    messagingSenderId: "755676249847",
+    appId: "1:755676249847:web:2a01bda6f99d6e32b7ddf2",
+    measurementId: "G-LN21J71XEV"
+  };
 
-<script>
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const auth = getAuth(app);
+
+  // LOGIN
+  window.login = function () {
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+
+    signInWithEmailAndPassword(auth, email, senha)
+      .catch(() => {
+        document.getElementById("erro").innerText = "Login inválido.";
+      });
+  };
+
+  // MOSTRAR VOTAÇÃO SE ESTIVER LOGADO
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      document.getElementById("loginArea").style.display = "none";
+      document.getElementById("areaVotacao").style.display = "block";
+    }
+  });
+
+  // VOTAÇÃO
   let votoSelecionado = null;
-  let fotoSelecionada = null;
 
-  function abrirVotacao() {
-    document.getElementById("areaVotacao").style.display = "block";
-  }
+  window.selecionar = function(botao, nome) {
+    document.querySelectorAll(".botao-voto")
+      .forEach(b => b.classList.remove("selecionado"));
 
-  function selecionar(botao, nome) {
-    document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
     botao.classList.add("selecionado");
-
     votoSelecionado = nome;
-    fotoSelecionada = botao.querySelector("img").src;
-  }
+  };
 
-  function confirmarVoto() {
+  window.confirmarVoto = async function() {
     if (!votoSelecionado) return;
 
-    document.getElementById("bola").classList.add("ativa");
+    const votoRef = ref(db, "votos/" + votoSelecionado);
+    const snapshot = await get(votoRef);
+    const atual = snapshot.exists() ? snapshot.val() : 0;
 
-    setTimeout(() => {
-      votar(votoSelecionado); // função original do Firebase
+    set(votoRef, atual + 1);
+  };
 
-      document.getElementById("areaVotacao").style.display = "none";
-      document.getElementById("telaConfirmacao").style.display = "block";
+  // RESULTADOS AO VIVO
+  const votosRef = ref(db, "votos");
+  onValue(votosRef, (snapshot) => {
+    const dados = snapshot.val();
+    if (!dados) return;
 
-      document.getElementById("fotoConfirmacao").src = fotoSelecionada;
-      document.getElementById("nomeConfirmacao").innerText = votoSelecionado;
-    }, 400);
-  }
-
-  function voltarVotacao() {
-    document.getElementById("telaConfirmacao").style.display = "none";
-    document.getElementById("areaVotacao").style.display = "block";
-    document.getElementById("bola").classList.remove("ativa");
-
-    document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
-    votoSelecionado = null;
-  }
+    let texto = "";
+    for (let nome in dados) {
+      texto += nome + ": " + dados[nome] + " votos<br>";
+    }
+    document.getElementById("resultado").innerHTML = texto;
+  });
 </script>
-
-<script type="module" src="script.js"></script>
 
 </body>
 </html>
