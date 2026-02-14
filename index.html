@@ -1,81 +1,18 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Votação</title>
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: white;
-      text-align: center;
-      margin: 0;
-      padding: 20px;
-    }
-
-    h1 {
-      font-size: 28px;
-      margin-bottom: 30px;
-    }
-
-    .botoes {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      max-width: 400px;
-      margin: auto;
-    }
-
-    button {
-      padding: 20px;
-      font-size: 20px;
-      border: none;
-      border-radius: 15px;
-      background: linear-gradient(45deg, #7a00ff, #00ff9d);
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:active {
-      transform: scale(0.97);
-    }
-
-    #resultado {
-      margin-top: 30px;
-      font-size: 20px;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
   <h1>Vote em quem deve sair</h1>
 
-  <div class="botoes">
-    <button onclick="votar('Jogador1')">Jogador 1</button>
-    <button onclick="votar('Jogador2')">Jogador 2</button>
-  </div>
+  <button onclick="votar('Jogador1')">Jogador 1</button>
+  <button onclick="votar('Jogador2')">Jogador 2</button>
 
   <h2>Resultados:</h2>
   <p id="resultado"></p>
 
-  <script>
-    let votos = {
-      Jogador1: 0,
-      Jogador2: 0
-    };
-
-    function votar(jogador) {
-      votos[jogador]++;
-      atualizarResultado();
-    }
-
-    function atualizarResultado() {
-      document.getElementById("resultado").innerText =
-        "Jogador 1: " + votos.Jogador1 + " votos | " +
-        "Jogador 2: " + votos.Jogador2 + " votos";
-    }
-  </script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
