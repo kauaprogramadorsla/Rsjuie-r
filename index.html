@@ -7,22 +7,60 @@
   <style>
     body {
       margin: 0;
-      padding: 20px;
       font-family: Arial, sans-serif;
-      text-align: center;
-
-      /* NOVO FUNDO */
       background: url("https://i.ibb.co/mCBrxzgs/Untitled770-20260214172706.png") no-repeat center center fixed;
       background-size: cover;
+      color: white;
     }
 
     h1, h2, p {
-      color: white;
       text-shadow: 0 2px 5px rgba(0,0,0,0.7);
     }
 
-    .opcoes {
+    /* LAYOUT PRINCIPAL */
+    .container {
       display: flex;
+      height: 100vh;
+    }
+
+    /* MENU LATERAL */
+    .menu {
+      width: 140px;
+      padding: 10px;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.8),
+        rgba(0,0,0,0.3)
+      );
+      overflow-y: auto;
+    }
+
+    .menu button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.6),
+        rgba(0,0,0,0)
+      );
+      color: white;
+    }
+
+    /* ÁREA PRINCIPAL */
+    .conteudo {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      text-align: center;
+    }
+
+    .opcoes {
+      display: none;
       flex-direction: column;
       gap: 20px;
       max-width: 500px;
@@ -30,7 +68,6 @@
     }
 
     .botao-voto {
-      position: relative;
       padding: 25px;
       font-size: 20px;
       font-weight: bold;
@@ -39,51 +76,69 @@
       cursor: pointer;
       color: black;
 
-      /* Cor bege com degradê preto */
+      /* AMARELO ALARANJADO */
       background: linear-gradient(
         to top,
         rgba(0, 0, 0, 0.5),
         rgba(0, 0, 0, 0)
       ),
-      #e8dcc5;
+      #ffb347;
 
       transition: 0.2s;
     }
 
     .botao-voto.selecionado {
-      outline: 4px solid #6b3e2e; /* marrom */
+      outline: 4px solid #6b3e2e;
     }
   </style>
 </head>
 
 <body>
-  <h1>Vote em quem deve sair</h1>
 
-  <div class="opcoes">
-    <button class="botao-voto" onclick="votarComEfeito(this, 'Jogador1')">
-      Jogador 1
-    </button>
+<div class="container">
 
-    <button class="botao-voto" onclick="votarComEfeito(this, 'Jogador2')">
-      Jogador 2
-    </button>
+  <!-- MENU LATERAL -->
+  <div class="menu">
+    <button onclick="abrirVotacao()">Votação</button>
   </div>
 
-  <h2>Resultados:</h2>
-  <p id="resultado"></p>
+  <!-- CONTEÚDO PRINCIPAL -->
+  <div class="conteudo">
+    <h1>Vote em quem deve sair</h1>
 
-  <script>
-    function votarComEfeito(botao, jogador) {
-      botao.classList.add("selecionado");
+    <div class="opcoes" id="areaVotacao">
+      <button class="botao-voto" onclick="votarComEfeito(this, 'Jogador1')">
+        Jogador 1
+      </button>
 
-      setTimeout(() => {
-        botao.classList.remove("selecionado");
-      }, 1000);
+      <button class="botao-voto" onclick="votarComEfeito(this, 'Jogador2')">
+        Jogador 2
+      </button>
+    </div>
 
-      votar(jogador); // função original do Firebase
-    }
-  </script>
+    <h2>Resultados:</h2>
+    <p id="resultado"></p>
+  </div>
 
-  <script type="module" src="script.js"></script>
+</div>
+
+<script>
+  function abrirVotacao() {
+    document.getElementById("areaVotacao").style.display = "flex";
+  }
+
+  function votarComEfeito(botao, jogador) {
+    botao.classList.add("selecionado");
+
+    setTimeout(() => {
+      botao.classList.remove("selecionado");
+    }, 1000);
+
+    votar(jogador); // função original do Firebase
+  }
+</script>
+
+<script type="module" src="script.js"></script>
+
 </body>
 </html>
