@@ -11,50 +11,66 @@
       background: url("https://i.ibb.co/mCBrxzgs/Untitled770-20260214172706.png") no-repeat center center fixed;
       background-size: cover;
       color: white;
-      text-align: center;
     }
 
-    h1, h2 {
+    h1, h2, p {
       text-shadow: 0 2px 5px rgba(0,0,0,0.7);
     }
 
-    .card {
+    /* TELA LOGIN */
+    .tela-login {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
       background: rgba(0,0,0,0.6);
-      padding: 30px;
-      border-radius: 20px;
-      max-width: 400px;
-      margin: 80px auto;
     }
 
-    input {
-      width: 90%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 10px;
-      border: none;
-      font-size: 16px;
-    }
-
-    button {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 15px;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
+    .caixa-login {
       background: white;
       color: black;
+      padding: 30px;
+      border-radius: 20px;
+      width: 300px;
+      text-align: center;
+    }
+
+    .caixa-login input {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    .caixa-login button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
       margin-top: 10px;
     }
 
-    .google-btn {
-      background: #4285F4;
-      color: white;
+    .topo {
+      display: none;
+      gap: 15px;
+      padding: 10px;
+      background: rgba(0,0,0,0.8);
     }
 
-    .area-votacao {
-      display: none;
+    .topo button {
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .conteudo {
       padding: 20px;
+      text-align: center;
+      display: none;
     }
 
     .opcoes {
@@ -93,24 +109,26 @@
 
     .confirmar {
       margin-top: 25px;
-      padding: 12px 20px;
+      padding: 10px 20px;
       border-radius: 20px;
       background: white;
-      color: black;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
       cursor: pointer;
+      color: black;
       font-weight: bold;
-      display: inline-block;
     }
 
-    .logout {
-      margin-top: 20px;
-      background: crimson;
-      color: white;
+    .bola {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: gray;
     }
 
-    #erro {
-      color: #ffaaaa;
-      margin-top: 10px;
+    .bola.ativa {
+      background: limegreen;
     }
   </style>
 </head>
@@ -118,24 +136,23 @@
 <body>
 
 <!-- LOGIN -->
-<div class="card" id="loginArea">
-  <h1>Entrar ou Criar Conta</h1>
+<div class="tela-login" id="telaLogin">
+  <div class="caixa-login">
+    <h2>Criar Conta</h2>
+    <input type="text" id="usuario" placeholder="Nome de usuário">
+    <input type="password" id="senha" placeholder="Senha">
+    <button onclick="criarConta()">Entrar</button>
+    <p id="erro" style="color:red;"></p>
+  </div>
+</div>
 
-  <input type="email" id="email" placeholder="E-mail">
-  <input type="password" id="senha" placeholder="Senha">
-
-  <button onclick="criarConta()">Criar Conta</button>
-  <button onclick="login()">Entrar</button>
-
-  <button class="google-btn" onclick="loginGoogle()">
-    Entrar com Google
-  </button>
-
-  <p id="erro"></p>
+<!-- TOPO -->
+<div class="topo" id="topo">
+  <button onclick="logout()">Sair</button>
 </div>
 
 <!-- VOTAÇÃO -->
-<div class="area-votacao" id="areaVotacao">
+<div class="conteudo" id="areaVotacao">
   <h1>Vote em quem deve sair</h1>
 
   <div class="opcoes">
@@ -151,123 +168,72 @@
   </div>
 
   <div class="confirmar" onclick="confirmarVoto()">
+    <div class="bola" id="bola"></div>
     Confirmar voto
   </div>
-
-  <h2>Resultados:</h2>
-  <p id="resultado"></p>
-
-  <button class="logout" onclick="sair()">Sair</button>
 </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-  import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
-  import { 
-    getAuth, 
-    signInWithEmailAndPassword, 
-    createUserWithEmailAndPassword,
-    signInWithPopup,
-    GoogleAuthProvider,
-    onAuthStateChanged,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+<script>
+let votoSelecionado = null;
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyC8PSXTyOxn_kgyFzpn-Qw3EGUXdS7BGOo",
-    authDomain: "feature-8e659.firebaseapp.com",
-    databaseURL: "https://feature-8e659-default-rtdb.firebaseio.com",
-    projectId: "feature-8e659",
-    storageBucket: "feature-8e659.firebasestorage.app",
-    messagingSenderId: "755676249847",
-    appId: "1:755676249847:web:2a01bda6f99d6e32b7ddf2",
-    measurementId: "G-LN21J71XEV"
-  };
+/* LOGIN */
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
+function criarConta() {
+  const user = document.getElementById("usuario").value.trim();
+  const senha = document.getElementById("senha").value.trim();
+  const erro = document.getElementById("erro");
 
-  // CRIAR CONTA
-  window.criarConta = function () {
-    const email = document.getElementById("email").value;
-    const senha = document.getElementById("senha").value;
+  if (!user || !senha) {
+    erro.innerText = "Preencha tudo!";
+    return;
+  }
 
-    createUserWithEmailAndPassword(auth, email, senha)
-      .catch(error => {
-        document.getElementById("erro").innerText = error.message;
-      });
-  };
+  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || {};
 
-  // LOGIN EMAIL
-  window.login = function () {
-    const email = document.getElementById("email").value;
-    const senha = document.getElementById("senha").value;
+  if (usuarios[user] && usuarios[user] !== senha) {
+    erro.innerText = "Usuário já existe!";
+    return;
+  }
 
-    signInWithEmailAndPassword(auth, email, senha)
-      .catch(error => {
-        document.getElementById("erro").innerText = error.message;
-      });
-  };
+  usuarios[user] = senha;
+  localStorage.setItem("usuarios", JSON.stringify(usuarios));
+  localStorage.setItem("logado", user);
 
-  // LOGIN GOOGLE
-  window.loginGoogle = function () {
-    signInWithPopup(auth, provider)
-      .catch(error => {
-        document.getElementById("erro").innerText = error.message;
-      });
-  };
+  entrarSistema();
+}
 
-  // LOGOUT
-  window.sair = function () {
-    signOut(auth);
-  };
+function entrarSistema() {
+  document.getElementById("telaLogin").style.display = "none";
+  document.getElementById("areaVotacao").style.display = "block";
+  document.getElementById("topo").style.display = "flex";
+}
 
-  // CONTROLE DE TELA
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      loginArea.style.display = "none";
-      areaVotacao.style.display = "block";
-    } else {
-      loginArea.style.display = "block";
-      areaVotacao.style.display = "none";
-    }
-  });
+function logout() {
+  localStorage.removeItem("logado");
+  location.reload();
+}
 
-  // VOTAÇÃO
-  let votoSelecionado = null;
+/* AUTO LOGIN */
+window.onload = function() {
+  if (localStorage.getItem("logado")) {
+    entrarSistema();
+  }
+}
 
-  window.selecionar = function(botao, nome) {
-    document.querySelectorAll(".botao-voto")
-      .forEach(b => b.classList.remove("selecionado"));
+/* VOTAÇÃO */
 
-    botao.classList.add("selecionado");
-    votoSelecionado = nome;
-  };
+function selecionar(botao, nome) {
+  document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
+  botao.classList.add("selecionado");
+  votoSelecionado = nome;
+}
 
-  window.confirmarVoto = async function() {
-    if (!votoSelecionado) return;
+function confirmarVoto() {
+  if (!votoSelecionado) return;
 
-    const votoRef = ref(db, "votos/" + votoSelecionado);
-    const snapshot = await get(votoRef);
-    const atual = snapshot.exists() ? snapshot.val() : 0;
-
-    set(votoRef, atual + 1);
-  };
-
-  // RESULTADOS AO VIVO
-  const votosRef = ref(db, "votos");
-  onValue(votosRef, (snapshot) => {
-    const dados = snapshot.val();
-    if (!dados) return;
-
-    let texto = "";
-    for (let nome in dados) {
-      texto += nome + ": " + dados[nome] + " votos<br>";
-    }
-    resultado.innerHTML = texto;
-  });
+  document.getElementById("bola").classList.add("ativa");
+  alert("Voto confirmado em " + votoSelecionado);
+}
 </script>
 
 </body>
