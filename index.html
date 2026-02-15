@@ -20,9 +20,9 @@
     /* BARRA SUPERIOR */
     .topo {
       display: flex;
-      gap: 15px;
+      justify-content: space-between;
+      align-items: center;
       padding: 10px;
-      overflow-x: auto;
       background: linear-gradient(
         to top,
         rgba(0,0,0,0.8),
@@ -46,6 +46,57 @@
       );
     }
 
+    /* BOTÃO PERFIL */
+    .perfil-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .perfil-btn img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    /* ABA PERFIL */
+    .perfil-aba {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 300px;
+      height: 100%;
+      background: white;
+      color: black;
+      padding: 20px;
+      transition: 0.3s;
+      z-index: 9998;
+      box-shadow: -5px 0 15px rgba(0,0,0,0.4);
+    }
+
+    .perfil-aba.ativa {
+      right: 0;
+    }
+
+    .perfil-aba h2 {
+      margin-top: 40px;
+    }
+
+    .fechar-perfil {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 22px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
     .conteudo {
       padding: 20px;
       text-align: center;
@@ -63,7 +114,6 @@
       margin: auto;
     }
 
-    /* RETÂNGULO DE VOTO */
     .botao-voto {
       display: flex;
       align-items: center;
@@ -97,7 +147,6 @@
       outline: 4px solid #6b3e2e;
     }
 
-    /* BOTÃO CONFIRMAR */
     .confirmar {
       margin-top: 25px;
       padding: 10px 20px;
@@ -123,7 +172,6 @@
       background: limegreen;
     }
 
-    /* TELA DE CONFIRMAÇÃO */
     .tela-confirmacao {
       display: none;
       text-align: center;
@@ -160,7 +208,7 @@
       cursor: pointer;
     }
 
-    /* ================= LOGIN ================= */
+    /* LOGIN */
 
     .login-tela {
       position: fixed;
@@ -207,43 +255,22 @@
 <body>
 
 <div class="topo">
-<button onclick="abrirVotacao()">Votação</button>
+  <button onclick="abrirVotacao()">Votação</button>
+
+  <div class="perfil-btn" onclick="abrirPerfil()">
+    <img src="https://i.ibb.co/rRpfqfPv/12225881.png">
+  </div>
+</div>
+
+<div class="perfil-aba" id="perfilAba">
+  <div class="fechar-perfil" onclick="fecharPerfil()">✖</div>
+  <h2>Perfil</h2>
+  <p><strong>Usuário:</strong></p>
+  <p id="nomeUsuarioPerfil"></p>
 </div>
 
 <div class="conteudo area-votacao" id="areaVotacao">
   <h1>Vote em quem deve sair</h1>
-
-  <div class="opcoes">
-    <button class="botao-voto" onclick="selecionar(this, 'Jogador 1')">
-      <img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">
-      Jogador 1
-    </button>
-
-    <button class="botao-voto" onclick="selecionar(this, 'Jogador 2')">
-      <img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">
-      Jogador 2
-    </button>
-  </div>
-
-  <div class="confirmar" onclick="confirmarVoto()">
-    <div class="bola" id="bola"></div>
-    Confirmar voto
-  </div>
-
-  <h2>Resultados:</h2>
-  <p id="resultado"></p>
-</div>
-
-<!-- TELA APÓS VOTO -->
-<div class="tela-confirmacao" id="telaConfirmacao">
-  <div class="cartao-confirmacao">
-    <img id="fotoConfirmacao" src="">
-    <h2 id="nomeConfirmacao"></h2>
-  </div>
-
-  <button class="btn-voltar" onclick="voltarVotacao()">
-    Votar novamente
-  </button>
 </div>
 
 <!-- LOGIN -->
@@ -258,47 +285,13 @@
 </div>
 
 <script>
-let votoSelecionado = null;
-let fotoSelecionada = null;
-
-function abrirVotacao() {
-  document.getElementById("areaVotacao").style.display = "block";
+function abrirPerfil() {
+  document.getElementById("perfilAba").classList.add("ativa");
 }
 
-function selecionar(botao, nome) {
-  document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
-  botao.classList.add("selecionado");
-
-  votoSelecionado = nome;
-  fotoSelecionada = botao.querySelector("img").src;
+function fecharPerfil() {
+  document.getElementById("perfilAba").classList.remove("ativa");
 }
-
-function confirmarVoto() {
-  if (!votoSelecionado) return;
-
-  document.getElementById("bola").classList.add("ativa");
-
-  setTimeout(() => {
-    votar(votoSelecionado);
-
-    document.getElementById("areaVotacao").style.display = "none";
-    document.getElementById("telaConfirmacao").style.display = "block";
-
-    document.getElementById("fotoConfirmacao").src = fotoSelecionada;
-    document.getElementById("nomeConfirmacao").innerText = votoSelecionado;
-  }, 400);
-}
-
-function voltarVotacao() {
-  document.getElementById("telaConfirmacao").style.display = "none";
-  document.getElementById("areaVotacao").style.display = "block";
-  document.getElementById("bola").classList.remove("ativa");
-
-  document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
-  votoSelecionado = null;
-}
-
-/* LOGIN */
 
 function criarOuEntrar() {
   const usuario = document.getElementById("usuarioInput").value.trim();
@@ -324,12 +317,14 @@ function criarOuEntrar() {
 
   localStorage.setItem("usuarioLogado", usuario);
   document.getElementById("loginTela").style.display = "none";
+  document.getElementById("nomeUsuarioPerfil").innerText = usuario;
 }
 
 window.onload = function() {
   const usuario = localStorage.getItem("usuarioLogado");
   if (usuario) {
     document.getElementById("loginTela").style.display = "none";
+    document.getElementById("nomeUsuarioPerfil").innerText = usuario;
   }
 }
 </script>
