@@ -1,360 +1,268 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Votação</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Votação</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #8E0C76, black);
-      color: white;
-      min-height: 200vh;
-      overflow-y: auto;
-    }
+<style>
+body {
+margin: 0;
+font-family: Arial, sans-serif;
+background: url("https://i.ibb.co/mCBrxzgs/Untitled770-20260214172706.png") no-repeat center center fixed;
+background-size: cover;
+color: white;
+}
 
-    h1, h2, p {
-      text-shadow: 0 2px 5px rgba(0,0,0,0.7);
-    }
+h1, h2, p {
+text-shadow: 0 2px 5px rgba(0,0,0,0.7);
+}
 
-    .topo {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-      background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.3));
-    }
+/* BARRA SUPERIOR */
+.topo {
+display: flex;
+gap: 15px;
+padding: 10px;
+overflow-x: auto;
+background: linear-gradient(
+to top,
+rgba(0,0,0,0.8),
+rgba(0,0,0,0.3)
+);
+}
 
-    .topo button {
-      min-width: 160px;
-      padding: 15px 20px;
-      border: none;
-      border-radius: 15px;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      color: white;
-      background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0));
-    }
+.topo button {
+min-width: 160px;
+padding: 15px 20px;
+border: none;
+border-radius: 15px;
+font-size: 18px;
+font-weight: bold;
+cursor: pointer;
+color: white;
+background: linear-gradient(
+to top,
+rgba(0,0,0,0.6),
+rgba(0,0,0,0)
+);
+}
 
-    .perfil-btn {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      background: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      overflow: hidden;
-    }
+.conteudo {
+padding: 20px;
+text-align: center;
+}
 
-    .perfil-btn img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-    }
+.area-votacao {
+display: none;
+}
 
-    .perfil-aba {
-      position: fixed;
-      top: 0;
-      right: -320px;
-      width: 300px;
-      height: 100%;
-      background: white;
-      color: black;
-      padding: 20px;
-      transition: 0.3s;
-      z-index: 9998;
-      box-shadow: -5px 0 15px rgba(0,0,0,0.4);
-    }
+.opcoes {
+display: flex;
+flex-direction: column;
+gap: 20px;
+max-width: 600px;
+margin: auto;
+}
 
-    .perfil-aba.ativa {
-      right: 0;
-    }
+/* BOTÃO DE VOTO */
+.botao-voto {
+display: flex;
+align-items: center;
+gap: 15px;
+padding: 20px;
+height: 110px;
+font-size: 22px;
+font-weight: bold;
+border: none;
+border-radius: 20px;
+cursor: pointer;
+color: black;
+background: linear-gradient(
+to top,
+rgba(0,0,0,0.25),
+rgba(0,0,0,0)
+),
+white;
+transition: 0.2s;
+}
 
-    .fechar-perfil {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: 22px;
-      cursor: pointer;
-      font-weight: bold;
-    }
+.botao-voto img {
+width: 80px;
+height: 80px;
+border-radius: 12px;
+object-fit: cover;
+}
 
-    .conteudo {
-      padding: 20px;
-      text-align: center;
-    }
+.botao-voto.selecionado {
+outline: 4px solid #6b3e2e;
+}
 
-    .area-votacao {
-      display: none;
-    }
+/* CONFIRMAR */
+.confirmar {
+margin-top: 25px;
+padding: 10px 20px;
+border-radius: 20px;
+background: white;
+display: inline-flex;
+align-items: center;
+gap: 10px;
+cursor: pointer;
+color: black;
+font-weight: bold;
+}
 
-    .opcoes {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      max-width: 600px;
-      margin: auto;
-    }
+.bola {
+width: 18px;
+height: 18px;
+border-radius: 50%;
+background: gray;
+transition: 0.2s;
+}
 
-    .botao-voto {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      padding: 20px;
-      height: 110px;
-      font-size: 22px;
-      font-weight: bold;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      color: black;
-      background: white;
-    }
+.bola.ativa {
+background: limegreen;
+}
 
-    .botao-voto img {
-      width: 80px;
-      height: 80px;
-      border-radius: 12px;
-      object-fit: cover;
-    }
+/* TELA CONFIRMAÇÃO */
+.tela-confirmacao {
+display: none;
+text-align: center;
+padding: 40px 20px;
+}
 
-    .botao-voto.selecionado {
-      outline: 4px solid #6b3e2e;
-    }
+.cartao-confirmacao {
+background: linear-gradient(
+to top,
+rgba(0,0,0,0.25),
+rgba(0,0,0,0)
+),
+white;
+color: black;
+border-radius: 20px;
+padding: 20px;
+max-width: 400px;
+margin: auto;
+}
 
-    .confirmar {
-      margin-top: 25px;
-      padding: 10px 20px;
-      border-radius: 20px;
-      background: white;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      color: black;
-      font-weight: bold;
-    }
+.cartao-confirmacao img {
+width: 120px;
+height: 120px;
+border-radius: 15px;
+object-fit: cover;
+}
 
-    .bola {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: gray;
-      transition: 0.2s;
-    }
-
-    .bola.ativa {
-      background: limegreen;
-    }
-
-    .tela-confirmacao {
-      display: none;
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    .cartao-confirmacao {
-      background: white;
-      color: black;
-      border-radius: 20px;
-      padding: 20px;
-      max-width: 400px;
-      margin: auto;
-    }
-
-    .cartao-confirmacao img {
-      width: 120px;
-      height: 120px;
-      border-radius: 15px;
-      object-fit: cover;
-    }
-
-    .btn-voltar {
-      margin-top: 20px;
-      padding: 12px 25px;
-      border: none;
-      border-radius: 15px;
-      font-size: 18px;
-      cursor: pointer;
-    }
-
-    .login-tela {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-
-    .login-caixa {
-      background: white;
-      color: black;
-      padding: 30px;
-      border-radius: 20px;
-      width: 320px;
-      text-align: center;
-    }
-
-    .login-caixa input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border-radius: 12px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-
-    .login-caixa button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 15px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      background: black;
-      color: white;
-    }
-  </style>
+.btn-voltar {
+margin-top: 20px;
+padding: 12px 25px;
+border: none;
+border-radius: 15px;
+font-size: 18px;
+cursor: pointer;
+}
+</style>
 </head>
 
 <body>
 
 <div class="topo">
-  <button onclick="abrirVotacao()">Votação</button>
-  <div class="perfil-btn" onclick="abrirPerfil()">
-    <img src="https://i.ibb.co/rRpfqfPv/12225881.png">
-  </div>
-</div>
-
-<div class="perfil-aba" id="perfilAba">
-  <div class="fechar-perfil" onclick="fecharPerfil()">✖</div>
-  <h2>Perfil</h2>
-  <p><strong>Usuário:</strong></p>
-  <p id="nomeUsuarioPerfil"></p>
+<button onclick="abrirVotacao()">Votação</button>
 </div>
 
 <div class="conteudo area-votacao" id="areaVotacao">
-  <h1>Vote em quem deve sair</h1>
+<h1>Vote em quem deve sair</h1>
 
-  <div class="opcoes">
-    <button class="botao-voto" onclick="selecionar(this, 'Jogador 1')">
-      <img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">
-      Jogador 1
-    </button>
+<div class="opcoes">
+<button class="botao-voto" onclick="selecionar(this, 'Jogador 1')">
+<img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">
+Jogador 1
+</button>
 
-    <button class="botao-voto" onclick="selecionar(this, 'Jogador 2')">
-      <img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">
-      Jogador 2
-    </button>
-  </div>
+<button class="botao-voto" onclick="selecionar(this, 'Jogador 2')">
+<img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">
+Jogador 2
+</button>
+</div>
 
-  <div class="confirmar" onclick="confirmarVoto()">
-    <div class="bola" id="bola"></div>
-    Confirmar voto
-  </div>
+<div class="confirmar" onclick="confirmarVoto()">
+<div class="bola" id="bola"></div>
+Confirmar voto
+</div>
+
+<h2>Resultados:</h2>
+<p id="resultado"></p>
 </div>
 
 <div class="tela-confirmacao" id="telaConfirmacao">
-  <div class="cartao-confirmacao">
-    <img id="fotoConfirmacao" src="">
-    <h2 id="nomeConfirmacao"></h2>
-  </div>
-
-  <button class="btn-voltar" onclick="voltarVotacao()">
-    Votar novamente
-  </button>
+<div class="cartao-confirmacao">
+<img id="fotoConfirmacao" src="">
+<h2 id="nomeConfirmacao"></h2>
 </div>
 
-<div class="login-tela" id="loginTela">
-  <div class="login-caixa">
-    <h2>Criar Conta</h2>
-    <input type="text" id="usuarioInput" placeholder="Nome de usuário">
-    <input type="password" id="senhaInput" placeholder="Senha">
-    <button onclick="criarOuEntrar()">Entrar</button>
-    <p id="loginErro" style="color:red; font-size:14px;"></p>
-  </div>
+<button class="btn-voltar" onclick="voltarVotacao()">
+Votar novamente
+</button>
 </div>
 
 <script>
 let votoSelecionado = null;
 let fotoSelecionada = null;
 
-function abrirPerfil() {
-  document.getElementById("perfilAba").classList.add("ativa");
+/* SISTEMA DE VOTOS */
+let votos = JSON.parse(localStorage.getItem("votos")) || {
+"Jogador 1": 0,
+"Jogador 2": 0
+};
+
+function atualizarResultado() {
+document.getElementById("resultado").innerHTML =
+"Jogador 1: " + votos["Jogador 1"] + " votos<br>" +
+"Jogador 2: " + votos["Jogador 2"] + " votos";
 }
 
-function fecharPerfil() {
-  document.getElementById("perfilAba").classList.remove("ativa");
+function votar(nome) {
+if (!votos[nome]) votos[nome] = 0;
+votos[nome]++;
+localStorage.setItem("votos", JSON.stringify(votos));
+atualizarResultado();
 }
 
 function abrirVotacao() {
-  document.getElementById("areaVotacao").style.display = "block";
+document.getElementById("areaVotacao").style.display = "block";
 }
 
 function selecionar(botao, nome) {
-  document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
-  botao.classList.add("selecionado");
+document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
+botao.classList.add("selecionado");
 
-  votoSelecionado = nome;
-  fotoSelecionada = botao.querySelector("img").src;
+votoSelecionado = nome;
+fotoSelecionada = botao.querySelector("img").src;
 }
 
 function confirmarVoto() {
-  if (!votoSelecionado) return;
+if (!votoSelecionado) return;
 
-  document.getElementById("bola").classList.add("ativa");
+document.getElementById("bola").classList.add("ativa");
 
-  setTimeout(() => {
-    alert("Voto em " + votoSelecionado + " computado!");
-  }, 400);
+setTimeout(() => {
+votar(votoSelecionado);
+
+document.getElementById("areaVotacao").style.display = "none";
+document.getElementById("telaConfirmacao").style.display = "block";
+
+document.getElementById("fotoConfirmacao").src = fotoSelecionada;
+document.getElementById("nomeConfirmacao").innerText = votoSelecionado;
+}, 400);
 }
 
 function voltarVotacao() {
-  document.getElementById("telaConfirmacao").style.display = "none";
-  document.getElementById("areaVotacao").style.display = "block";
+document.getElementById("telaConfirmacao").style.display = "none";
+document.getElementById("areaVotacao").style.display = "block";
+document.getElementById("bola").classList.remove("ativa");
+
+document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
+votoSelecionado = null;
 }
 
-function criarOuEntrar() {
-  const usuario = document.getElementById("usuarioInput").value.trim();
-  const senha = document.getElementById("senhaInput").value.trim();
-  const erro = document.getElementById("loginErro");
-
-  if (!usuario || !senha) {
-    erro.innerText = "Preencha todos os campos.";
-    return;
-  }
-
-  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || {};
-
-  if (usuarios[usuario]) {
-    if (usuarios[usuario] !== senha) {
-      erro.innerText = "Senha incorreta.";
-      return;
-    }
-  } else {
-    usuarios[usuario] = senha;
-    localStorage.setItem("usuarios", JSON.stringify(usuarios));
-  }
-
-  localStorage.setItem("usuarioLogado", usuario);
-  document.getElementById("loginTela").style.display = "none";
-  document.getElementById("nomeUsuarioPerfil").innerText = usuario;
-}
-
-window.onload = function() {
-  const usuario = localStorage.getItem("usuarioLogado");
-  if (usuario) {
-    document.getElementById("loginTela").style.display = "none";
-    document.getElementById("nomeUsuarioPerfil").innerText = usuario;
-  }
-}
+window.onload = atualizarResultado;
 </script>
 
 </body>
