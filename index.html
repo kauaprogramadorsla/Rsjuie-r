@@ -1,308 +1,310 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Votação</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #7E0A69;
-      color: white;
-      text-align: center;
-    }
-    h1, h2, p {
-      text-shadow: 0 2px 5px rgba(0,0,0,0.7);
-    }
+    <title>Votação</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: url("https://i.ibb.co/mCBrxzgs/Untitled770-20260214172706.png") no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+        }
+        h1, h2, p {
+            text-shadow: 0 2px 5px rgba(0,0,0,0.7);
+        }
 
-    /* CONTADOR DE PESSOAS */
-    #contador {
-      font-size: 18px;
-      margin-top: 20px;
-    }
+        /* BARRA SUPERIOR */
+        .topo {
+            display: flex;
+            gap: 15px;
+            padding: 10px;
+            overflow-x: auto;
+            background: linear-gradient(
+                to top,
+                rgba(0,0,0,0.8),
+                rgba(0,0,0,0.3)
+            );
+        }
 
-    /* BARRA SUPERIOR */
-    .topo {
-      display: flex;
-      gap: 15px;
-      padding: 10px;
-      overflow-x: auto;
-      background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.8),
-        rgba(0,0,0,0.3)
-      );
-    }
+        .topo button {
+            min-width: 160px;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            background: linear-gradient(
+                to top,
+                rgba(0,0,0,0.6),
+                rgba(0,0,0,0)
+            );
+        }
 
-    .topo button {
-      min-width: 160px;
-      padding: 15px 20px;
-      border: none;
-      border-radius: 15px;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      color: white;
-      background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.6),
-        rgba(0,0,0,0)
-      );
-    }
+        .conteudo {
+            padding: 20px;
+            text-align: center;
+        }
 
-    .conteudo {
-      padding: 20px;
-      text-align: center;
-    }
+        .area-votacao {
+            display: none;
+        }
 
-    .area-votacao {
-      display: none;
-    }
+        .opcoes {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
 
-    .opcoes {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      max-width: 600px;
-      margin: auto;
-    }
+        /* RETÂNGULO DE VOTO */
+        .botao-voto {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            height: 110px;
+            font-size: 22px;
+            font-weight: bold;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            color: black;
+            background: linear-gradient(
+                to top,
+                rgba(0,0,0,0.25),
+                rgba(0,0,0,0)
+            ),
+            white;
+            transition: 0.2s;
+            position: relative;
+            justify-content: space-between;
+        }
 
-    .botao-voto {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      padding: 20px;
-      height: 110px;
-      font-size: 22px;
-      font-weight: bold;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      color: black;
-      background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.25),
-        rgba(0,0,0,0)
-      ), white;
-      transition: 0.2s;
-      position: relative;
-    }
+        .botao-voto img {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
 
-    .botao-voto img {
-      width: 80px;
-      height: 80px;
-      border-radius: 12px;
-      object-fit: cover;
-    }
+        .botao-voto.selecionado {
+            outline: 4px solid #6b3e2e;
+        }
 
-    .botao-voto.selecionado {
-      outline: 4px solid #6b3e2e;
-    }
+        /* BOTÃO CONFIRMAR */
+        .confirmar {
+            margin-top: 25px;
+            padding: 10px 20px;
+            border-radius: 20px;
+            background: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            color: black;
+            font-weight: bold;
+        }
 
-    .confirmar {
-      margin-top: 25px;
-      padding: 10px 20px;
-      border-radius: 20px;
-      background: white;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      color: black;
-      font-weight: bold;
-    }
+        .bola {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: gray;
+            transition: 0.2s;
+        }
 
-    .bola {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: gray;
-      transition: 0.2s;
-    }
+        .bola.ativa {
+            background: limegreen;
+        }
 
-    .bola.ativa {
-      background: limegreen;
-    }
+        /* TELA DE CONFIRMAÇÃO */
+        .tela-confirmacao {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
 
-    /* INPUT DE CÓDIGO */
-    #codigoContainer {
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      align-items: center;
-    }
+        .cartao-confirmacao {
+            background: linear-gradient(
+                to top,
+                rgba(0,0,0,0.25),
+                rgba(0,0,0,0)
+            ),
+            white;
+            color: black;
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 400px;
+            margin: auto;
+        }
 
-    #codigoInput {
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      font-size: 16px;
-    }
+        .cartao-confirmacao img {
+            width: 120px;
+            height: 120px;
+            border-radius: 15px;
+            object-fit: cover;
+        }
 
-    #verificarCodigo {
-      padding: 10px 20px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-    }
+        .btn-voltar {
+            margin-top: 20px;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            cursor: pointer;
+        }
 
-    /* TELA DE CONFIRMAÇÃO */
-    .tela-confirmacao {
-      display: none;
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    .cartao-confirmacao {
-      background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.25),
-        rgba(0,0,0,0)
-      ), white;
-      color: black;
-      border-radius: 20px;
-      padding: 20px;
-      max-width: 400px;
-      margin: auto;
-    }
-
-    .cartao-confirmacao img {
-      width: 120px;
-      height: 120px;
-      border-radius: 15px;
-      object-fit: cover;
-    }
-
-    .btn-voltar {
-      margin-top: 20px;
-      padding: 12px 25px;
-      border: none;
-      border-radius: 15px;
-      font-size: 18px;
-      cursor: pointer;
-    }
-
-    /* IMAGEM PARA ABRIR VOTAÇÃO */
-    #abrirImagem {
-      margin-top: 20px;
-      cursor: pointer;
-      width: 200px;
-      border-radius: 15px;
-      transition: 0.2s;
-    }
-
-    #abrirImagem:hover {
-      transform: scale(1.05);
-    }
-
-  </style>
+        /* INPUT PARA CÓDIGO */
+        .codigo-container {
+            margin-top: 20px;
+        }
+        .codigo-container input {
+            padding: 10px;
+            border-radius: 15px;
+            border: none;
+            font-size: 18px;
+            width: 100px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 
-<div id="contador">Pessoas votando no site: 0</div>
-
-<h1>Quem você vai votar?</h1>
-<img id="abrirImagem" src="https://i.ibb.co/6cyVhnwV/Untitled778-20260228180906.png" onclick="abrirVotacao()" alt="Abrir Votação">
-
 <div class="topo">
-  <button onclick="abrirVotacao()">Votação</button>
+    <button onclick="abrirVotacao()">Votação</button>
 </div>
 
-<div class="conteudo area-votacao" id="areaVotacao">
-  <h1>Vote em quem deve sair</h1>
-  <div class="opcoes">
-    <button class="botao-voto" onclick="selecionar(this, 'Jogador 1')">
-      <img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">
-      Jogador 1
-    </button>
-    <button class="botao-voto" onclick="selecionar(this, 'Jogador 2')">
-      <img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">
-      Jogador 2
-    </button>
-  </div>
+<div class="conteudo area-votacao" id="areaVotacao">        
+    <h1>Vote em quem deve sair</h1>    
+    <div class="opcoes">        
+        <button class="botao-voto" onclick="selecionar(this, 'Jogador 1')">        
+            <img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">        
+            Jogador 1
+            <span class="contador" id="contador1">Pessoas votando no site: 0</span>
+        </button>  
+        <button class="botao-voto" onclick="selecionar(this, 'Jogador 2')">        
+            <img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">        
+            Jogador 2
+            <span class="contador" id="contador2">Pessoas votando no site: 0</span>
+        </button>    
+    </div>    
+    <div class="confirmar" onclick="confirmarVoto()">        
+        <div class="bola" id="bola"></div>        
+        Confirmar voto        
+    </div>  
 
-  <div class="confirmar" onclick="confirmarVoto()">
-    <div class="bola" id="bola"></div>
-    Confirmar voto
-  </div>
+    <div class="codigo-container">
+        <p>Digite o código para ver o resultado:</p>
+        <input type="text" id="codigoResultado" placeholder="0000">
+        <button onclick="mostrarResultado()">Ver resultado</button>
+    </div>
 
-  <div id="codigoContainer">
-    <input type="text" id="codigoInput" placeholder="Digite o código">
-    <button id="verificarCodigo" onclick="verificarCodigo()">Verificar</button>
-  </div>
+    <h2>Resultados:</h2>        
+    <p id="resultado"></p>        
+</div>  
 
-  <h2>Resultados:</h2>
-  <p id="resultado"></p>
-</div>
+<!-- TELA APÓS VOTO -->
+<div class="tela-confirmacao" id="telaConfirmacao">        
+    <div class="cartao-confirmacao">        
+        <img id="fotoConfirmacao" src="">        
+        <h2 id="nomeConfirmacao"></h2>        
+    </div>    
+    <button class="btn-voltar" onclick="voltarVotacao()">        
+        Votar novamente        
+    </button>        
+</div>  
 
-<div class="tela-confirmacao" id="telaConfirmacao">
-  <div class="cartao-confirmacao">
-    <img id="fotoConfirmacao" src="">
-    <h2 id="nomeConfirmacao"></h2>
-  </div>
-  <button class="btn-voltar" onclick="voltarVotacao()">Votar novamente</button>
-</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+import { getDatabase, ref, set, onValue, increment } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
 
-<script>
-  let votoSelecionado = null;
-  let fotoSelecionada = null;
-  let resultadoVotacao = "";
+// CONFIGURAÇÃO FIREBASE
+const firebaseConfig = {
+    apiKey: "SEU_API_KEY",
+    authDomain: "SEU_AUTH_DOMAIN",
+    databaseURL: "SUA_DATABASE_URL",
+    projectId: "SEU_PROJECT_ID",
+    storageBucket: "SEU_STORAGE_BUCKET",
+    messagingSenderId: "SEU_MESSAGING_ID",
+    appId: "SEU_APP_ID"
+};
 
-  // CONTADOR SIMULADO
-  let pessoasVotando = 0;
-  setInterval(() => {
-    document.getElementById("contador").innerText = `Pessoas votando no site: ${pessoasVotando}`;
-  }, 1000);
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-  function abrirVotacao() {
+let votoSelecionado = null;
+let fotoSelecionada = null;
+
+function abrirVotacao() {
     document.getElementById("areaVotacao").style.display = "block";
-    pessoasVotando++;
-  }
+}
 
-  function selecionar(botao, nome) {
+function selecionar(botao, nome) {
     document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
     botao.classList.add("selecionado");
     votoSelecionado = nome;
     fotoSelecionada = botao.querySelector("img").src;
-  }
+}
 
-  function confirmarVoto() {
+function confirmarVoto() {
     if (!votoSelecionado) return;
 
     document.getElementById("bola").classList.add("ativa");
 
+    // Atualizar contador no Firebase
+    const votoRef = ref(db, 'votos/' + votoSelecionado);
+    set(votoRef, increment(1));
+
     setTimeout(() => {
-      // Simula função do Firebase
-      resultadoVotacao = `${votoSelecionado} recebeu votos!`;
-
-      document.getElementById("areaVotacao").style.display = "none";
-      document.getElementById("telaConfirmacao").style.display = "block";
-
-      document.getElementById("fotoConfirmacao").src = fotoSelecionada;
-      document.getElementById("nomeConfirmacao").innerText = votoSelecionado;
+        document.getElementById("areaVotacao").style.display = "none";
+        document.getElementById("telaConfirmacao").style.display = "block";
+        document.getElementById("fotoConfirmacao").src = fotoSelecionada;
+        document.getElementById("nomeConfirmacao").innerText = votoSelecionado;
     }, 400);
-  }
+}
 
-  function voltarVotacao() {
+function voltarVotacao() {
     document.getElementById("telaConfirmacao").style.display = "none";
     document.getElementById("areaVotacao").style.display = "block";
     document.getElementById("bola").classList.remove("ativa");
     document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
     votoSelecionado = null;
-  }
+}
 
-  function verificarCodigo() {
-    const codigo = document.getElementById("codigoInput").value;
+function mostrarResultado() {
+    const codigo = document.getElementById("codigoResultado").value;
     if (codigo === "0000") {
-      document.getElementById("resultado").innerText = resultadoVotacao || "Ainda não houve votos.";
+        const resultadoEl = document.getElementById("resultado");
+        resultadoEl.innerHTML = "";
+        const jogadores = ["Jogador 1", "Jogador 2"];
+        jogadores.forEach(j => {
+            const votoRef = ref(db, 'votos/' + j);
+            onValue(votoRef, (snapshot) => {
+                const val = snapshot.val() || 0;
+                resultadoEl.innerHTML += `${j}: ${val} votos<br>`;
+            });
+        });
     } else {
-      alert("Código incorreto!");
+        alert("Código incorreto!");
     }
-  }
+}
+
+// ATUALIZAÇÃO AO VIVO DOS CONTADORES
+const jogadores = ["Jogador 1", "Jogador 2"];
+jogadores.forEach((j, index) => {
+    const contadorEl = document.getElementById(`contador${index+1}`);
+    const votoRef = ref(db, 'votos/' + j);
+    onValue(votoRef, (snapshot) => {
+        const val = snapshot.val() || 0;
+        contadorEl.innerText = `Pessoas votando no site: ${val}`;
+    });
+});
 </script>
 
-<script type="module" src="script.js"></script>
 </body>
 </html>
