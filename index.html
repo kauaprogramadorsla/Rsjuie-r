@@ -11,36 +11,52 @@
       color: white;
       text-align: center;
     }
+    h1, h2, p {
+      text-shadow: 0 2px 5px rgba(0,0,0,0.7);
+    }
 
     /* CONTADOR DE PESSOAS */
     #contador {
       font-size: 18px;
       margin-top: 20px;
-      text-shadow: 0 2px 5px rgba(0,0,0,0.7);
     }
 
-    h1, h2, p {
-      text-shadow: 0 2px 5px rgba(0,0,0,0.7);
+    /* BARRA SUPERIOR */
+    .topo {
+      display: flex;
+      gap: 15px;
+      padding: 10px;
+      overflow-x: auto;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.8),
+        rgba(0,0,0,0.3)
+      );
     }
 
-    /* IMAGEM DE ABRIR VOTAÇÃO */
-    #abrirImagem {
-      margin-top: 30px;
-      cursor: pointer;
-      width: 200px;
+    .topo button {
+      min-width: 160px;
+      padding: 15px 20px;
+      border: none;
       border-radius: 15px;
-      transition: 0.2s;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.6),
+        rgba(0,0,0,0)
+      );
     }
 
-    #abrirImagem:hover {
-      transform: scale(1.05);
-    }
-
-    /* ÁREA DE VOTAÇÃO */
-    .area-votacao {
-      display: none;
+    .conteudo {
       padding: 20px;
       text-align: center;
+    }
+
+    .area-votacao {
+      display: none;
     }
 
     .opcoes {
@@ -63,7 +79,11 @@
       border-radius: 20px;
       cursor: pointer;
       color: black;
-      background: linear-gradient(to top, rgba(0,0,0,0.25), rgba(0,0,0,0)), white;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.25),
+        rgba(0,0,0,0)
+      ), white;
       transition: 0.2s;
       position: relative;
     }
@@ -136,7 +156,11 @@
     }
 
     .cartao-confirmacao {
-      background: linear-gradient(to top, rgba(0,0,0,0.25), rgba(0,0,0,0)), white;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.25),
+        rgba(0,0,0,0)
+      ), white;
       color: black;
       border-radius: 20px;
       padding: 20px;
@@ -160,6 +184,19 @@
       cursor: pointer;
     }
 
+    /* IMAGEM PARA ABRIR VOTAÇÃO */
+    #abrirImagem {
+      margin-top: 20px;
+      cursor: pointer;
+      width: 200px;
+      border-radius: 15px;
+      transition: 0.2s;
+    }
+
+    #abrirImagem:hover {
+      transform: scale(1.05);
+    }
+
   </style>
 </head>
 <body>
@@ -167,7 +204,11 @@
 <div id="contador">Pessoas votando no site: 0</div>
 
 <h1>Quem você vai votar?</h1>
-<img id="abrirImagem" src="https://i.ibb.co/6cyVhnwV/Untitled778-20260228180906.png" alt="Abrir Votação" onclick="abrirVotacao()">
+<img id="abrirImagem" src="https://i.ibb.co/6cyVhnwV/Untitled778-20260228180906.png" onclick="abrirVotacao()" alt="Abrir Votação">
+
+<div class="topo">
+  <button onclick="abrirVotacao()">Votação</button>
+</div>
 
 <div class="conteudo area-votacao" id="areaVotacao">
   <h1>Vote em quem deve sair</h1>
@@ -196,15 +237,12 @@
   <p id="resultado"></p>
 </div>
 
-<!-- TELA APÓS VOTO -->
 <div class="tela-confirmacao" id="telaConfirmacao">
   <div class="cartao-confirmacao">
     <img id="fotoConfirmacao" src="">
     <h2 id="nomeConfirmacao"></h2>
   </div>
-  <button class="btn-voltar" onclick="voltarVotacao()">
-    Votar novamente
-  </button>
+  <button class="btn-voltar" onclick="voltarVotacao()">Votar novamente</button>
 </div>
 
 <script>
@@ -236,6 +274,7 @@
     document.getElementById("bola").classList.add("ativa");
 
     setTimeout(() => {
+      // Simula função do Firebase
       resultadoVotacao = `${votoSelecionado} recebeu votos!`;
 
       document.getElementById("areaVotacao").style.display = "none";
@@ -250,7 +289,6 @@
     document.getElementById("telaConfirmacao").style.display = "none";
     document.getElementById("areaVotacao").style.display = "block";
     document.getElementById("bola").classList.remove("ativa");
-
     document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
     votoSelecionado = null;
   }
@@ -265,5 +303,6 @@
   }
 </script>
 
+<script type="module" src="script.js"></script>
 </body>
 </html>
