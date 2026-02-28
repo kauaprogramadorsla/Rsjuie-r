@@ -1,99 +1,99 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, push, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-
+// Configuração do Firebase - SUBSTITUA COM SUAS CREDENCIAIS
 const firebaseConfig = {
-  apiKey: "AIzaSyC8PSXTyOxn_kgyFzpn-Qw3EGUXdS7BGOo",
-  authDomain: "feature-8e659.firebaseapp.com",
-  databaseURL: "https://feature-8e659-default-rtdb.firebaseio.com",
-  projectId: "feature-8e659",
-  storageBucket: "feature-8e659.firebasestorage.app",
-  messagingSenderId: "755676249847",
-  appId: "1:755676249847:web:2a01bda6f99d6e32b7ddf2",
-  measurementId: "G-LN21J71XEV"
+    apiKey: "SUA_API_KEY",
+    authDomain: "SEU_PROJETO.firebaseapp.com",
+    databaseURL: "https://SEU_PROJETO-default-rtdb.firebaseio.com",
+    projectId: "SEU_PROJETO",
+    storageBucket: "SEU_PROJETO.appspot.com",
+    messagingSenderId: "SEU_SENDER_ID",
+    appId: "SEU_APP_ID"
 };
 
+// Inicializar Firebase
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const auth = getAuth(app);
+const database = getDatabase(app);
 
+// Referências
+const votosRef = ref(database, 'votos');
+const contadorRef = ref(database, 'contador');
 
-// =======================
-// SISTEMA DE VOTAÇÃO
-// =======================
-window.votar = async function(nome) {
-  const votoRef = ref(db, "votos/" + nome);
-  const snapshot = await get(votoRef);
-
-  let votos = 0;
-  if (snapshot.exists()) {
-    votos = snapshot.val();
-  }
-
-  set(votoRef, votos + 1);
+// Função para votar
+window.votar = function(nomeJogador) {
+    const novoVoto = {
+        jogador: nomeJogador,
+        timestamp: Date.now()
+    };
+    
+    push(votosRef, novoVoto)
+        .then(() => {
+            console.log("Voto registrado com sucesso!");
+        })
+        .catch((error) => {
+            console.error("Erro ao registrar voto:", error);
+        });
 };
 
-const resultadoRef = ref(db, "votos");
-onValue(resultadoRef, (snapshot) => {
-  let texto = "";
-  snapshot.forEach((child) => {
-    texto += child.key + ": " + child.val() + " votos<br>";
-  });
-
-  const resultado = document.getElementById("resultado");
-  if (resultado) {
-    resultado.innerHTML = texto;
-  }
-});
-
-
-// =======================
-// SISTEMA DE LOGIN
-// =======================
-
-// criar conta
-window.criarConta = function () {
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value;
-
-  createUserWithEmailAndPassword(auth, email, senha)
-    .then(() => {
-      alert("Conta criada com sucesso!");
-    })
-    .catch(error => {
-      alert(error.message);
+// Função para atualizar contador de votantes
+function atualizarContador() {
+    onValue(contadorRef, (snapshot) => {
+        const contador = snapshot.val();
+        const contadorElement = document.getElementById('contadorVotantes');
+        if (contadorElement) {
+            contadorElement.textContent = contador || 0;
+        }
     });
-};
+}
 
-// entrar
-window.entrar = function () {
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value;
-
-  signInWithEmailAndPassword(auth, email, senha)
-    .catch(error => {
-      alert(error.message);
+// Função para atualizar resultados em tempo real
+function atualizarResultadosAoVivo() {
+    onValue(votosRef, (snapshot) => {
+        const votos = snapshot.val();
+        const resultados = {};
+        
+        if (votos) {
+            Object.values(votos).forEach((voto) => {
+                const jogador = voto.jogador;
+                resultados[jogador] = (resultados[jogador] || 0) + 1;
+            });
+        }
+        
+        // Atualizar display de resultados
+        const resultadoElement = document.getElementById('resultado');
+        if (resultadoElement && window.resultadosVisiveis) {
+            let textoResultados = "";
+            for (const [jogador, quantidade] of Object.entries(resultados)) {
+                textoResultados += `${jogador}: ${quantidade} voto(s)<br>`;
+            }
+            resultadoElement.innerHTML = textoResultados || "Nenhum voto registrado ainda";
+        }
     });
-};
+}
 
-// verificar login
-onAuthStateChanged(auth, user => {
-  const areaLogin = document.getElementById("areaLogin");
-  const areaVotacao = document.getElementById("areaVotacao");
+// Função para incrementar contador quando alguém entra na página
+function incrementarContador() {
+    onValue(contadorRef, (snapshot) => {
+        const contadorAtual = snapshot.val() || 0;
+        update(contadorRef, { total: contadorAtual + 1 });
+    }, { onlyOnce: true });
+}
 
-  if (!areaLogin || !areaVotacao) return;
+// Função para decrementar contador quando alguém sai da página
+function decrementarContador() {
+    onValue(contadorRef, (snapshot) => {
+        const contadorAtual = snapshot.val() || 0;
+        if (contadorAtual > 0) {
+            update(contadorRef, { total: contadorAtual - 1 });
+        }
+    }, { onlyOnce: true });
+}
 
-  if (user) {
-    areaLogin.style.display = "none";
-    areaVotacao.style.display = "block";
-  } else {
-    areaLogin.style.display = "block";
-    areaVotacao.style.display = "none";
-  }
-});
+// Inicializar
+atualizarContador();
+atualizarResultadosAoVivo();
+incrementarContador();
+
+// Decrementar contador quando a página é fechada
+window.addEventListener('beforeunload', decrementarContador);
