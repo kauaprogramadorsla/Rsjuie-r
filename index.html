@@ -1,32 +1,26 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Votação</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <title>Votação</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-  body {
+body {
 margin: 0;
 font-family: Arial, sans-serif;
 background: url("https://i.ibb.co/mCBrxzgs/Untitled770-20260214172706.png") no-repeat center center fixed;
 background-size: cover;
 color: white;
-}
-    h1, h2, p {
+}    
+h1, h2, p {
 text-shadow: 0 2px 5px rgba(0,0,0,0.7);
-}
-      /* BARRA SUPERIOR */
+}      
 .topo {
 display: flex;
 gap: 15px;
 padding: 10px;
 overflow-x: auto;
-background: linear-gradient(
-to top,
-rgba(0,0,0,0.8),
-rgba(0,0,0,0.3)
-);
+background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.3));
 }
-
 .topo button {
 min-width: 160px;
 padding: 15px 20px;
@@ -36,22 +30,15 @@ font-size: 18px;
 font-weight: bold;
 cursor: pointer;
 color: white;
-background: linear-gradient(
-to top,
-rgba(0,0,0,0.6),
-rgba(0,0,0,0)
-);
+background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0));
 }
-
 .conteudo {
 padding: 20px;
 text-align: center;
 }
-
 .area-votacao {
 display: none;
 }
-
 .opcoes {
 display: flex;
 flex-direction: column;
@@ -59,8 +46,6 @@ gap: 20px;
 max-width: 600px;
 margin: auto;
 }
-
-/* RETÂNGULO DE VOTO */
 .botao-voto {
 display: flex;
 align-items: center;
@@ -73,28 +58,20 @@ border: none;
 border-radius: 20px;
 cursor: pointer;
 color: black;
-background: linear-gradient(
-to top,
-rgba(0,0,0,0.25),
-rgba(0,0,0,0)
-),
-white;
+background: linear-gradient(to top, rgba(0,0,0,0.25), rgba(0,0,0,0)), white;
 transition: 0.2s;
 position: relative;
+justify-content: space-between;
 }
-
 .botao-voto img {
 width: 80px;
 height: 80px;
 border-radius: 12px;
 object-fit: cover;
 }
-
 .botao-voto.selecionado {
 outline: 4px solid #6b3e2e;
 }
-
-/* BOTÃO CONFIRMAR */
 .confirmar {
 margin-top: 25px;
 padding: 10px 20px;
@@ -107,7 +84,6 @@ cursor: pointer;
 color: black;
 font-weight: bold;
 }
-
 .bola {
 width: 18px;
 height: 18px;
@@ -115,39 +91,28 @@ border-radius: 50%;
 background: gray;
 transition: 0.2s;
 }
-
 .bola.ativa {
 background: limegreen;
 }
-
-/* TELA DE CONFIRMAÇÃO */
 .tela-confirmacao {
 display: none;
 text-align: center;
 padding: 40px 20px;
 }
-
 .cartao-confirmacao {
-background: linear-gradient(
-to top,
-rgba(0,0,0,0.25),
-rgba(0,0,0,0)
-),
-white;
+background: linear-gradient(to top, rgba(0,0,0,0.25), rgba(0,0,0,0)), white;
 color: black;
 border-radius: 20px;
 padding: 20px;
 max-width: 400px;
 margin: auto;
 }
-
 .cartao-confirmacao img {
 width: 120px;
 height: 120px;
 border-radius: 15px;
 object-fit: cover;
 }
-
 .btn-voltar {
 margin-top: 20px;
 padding: 12px 25px;
@@ -156,163 +121,143 @@ border-radius: 15px;
 font-size: 18px;
 cursor: pointer;
 }
-
-/* ÁREA DE CÓDIGO */
-.area-codigo {
+.codigo-container {
 margin-top: 20px;
 }
-
-.input-codigo {
-padding: 10px 15px;
+.codigo-container input {
+padding: 10px;
+border-radius: 15px;
 border: none;
-border-radius: 10px;
-font-size: 16px;
-width: 120px;
+font-size: 18px;
+width: 100px;
 text-align: center;
 }
-
-.btn-verificar {
-padding: 10px 20px;
-border: none;
-border-radius: 10px;
-font-size: 16px;
-cursor: pointer;
-background: #6b3e2e;
-color: white;
-font-weight: bold;
-}
-
-.resultados-escondidos {
-display: none;
-margin-top: 20px;
-}
-
-.resultados-visiveis {
-display: block;
-margin-top: 20px;
-}
-
-.contador-votantes {
-font-size: 14px;
-color: #ccc;
-margin-top: 5px;
-}
-
 </style>
-  <script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
 </head>
-  <body>
-  <div class="topo">
-<button onclick="abrirVotacao()">Votação</button>
-<div class="contador-votantes">pessoas votando no site: <span id="contadorVotantes">0</span></div>
+<body>
 
+<div class="topo">
+<button onclick="abrirVotacao()">Votação</button>
 </div>
-  <div class="conteudo area-votacao" id="areaVotacao">          
-  <h1>Vote em quem deve sair</h1>
-    <div class="opcoes">          
+
+<div class="conteudo area-votacao" id="areaVotacao">          
+  <h1>Vote em quem deve sair</h1>    
+  <div class="opcoes">          
     <button class="botao-voto" onclick="selecionar(this, 'Jogador 1')">          
       <img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">          
       Jogador 1          
-    </button>
-  <button class="botao-voto" onclick="selecionar(this, 'Jogador 2')">          
-  <img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">          
-  Jogador 2          
-</button>
-    </div>
-    <div class="confirmar" onclick="confirmarVoto()">          
+      <span class="contador" id="contador1">Pessoas votando no site: 0</span>
+    </button>  
+    <button class="botao-voto" onclick="selecionar(this, 'Jogador 2')">          
+      <img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">          
+      Jogador 2
+      <span class="contador" id="contador2">Pessoas votando no site: 0</span>
+    </button>    
+  </div>    
+  <div class="confirmar" onclick="confirmarVoto()">          
     <div class="bola" id="bola"></div>          
     Confirmar voto          
   </div>
-    
-    <!-- ÁREA DO CÓDIGO -->
-    <div class="area-codigo">
-        <input type="text" class="input-codigo" id="inputCodigo" placeholder="Código" maxlength="4">
-        <button class="btn-verificar" onclick="verificarCodigo()">Verificar</button>
-    </div>
-    
-    <h2>Resultados:</h2>
-    <div class="resultados-escondidos" id="resultadosEscondidos">
-        <p>Digite o código para ver os resultados</p>
-    </div>
-    <div class="resultados-visiveis" id="resultadosVisiveis" style="display: none;">
-        <p id="resultado"></p>
-    </div>
-          
-</div>
-  <!-- TELA APÓS VOTO -->
-  <div class="tela-confirmacao" id="telaConfirmacao">          
+
+  <div class="codigo-container">
+    <p>Digite o código para ver o resultado:</p>
+    <input type="text" id="codigoResultado" placeholder="0000">
+    <button onclick="mostrarResultado()">Ver resultado</button>
+  </div>
+
+  <h2>Resultados:</h2>          
+  <p id="resultado"></p>          
+</div>  
+
+<div class="tela-confirmacao" id="telaConfirmacao">          
   <div class="cartao-confirmacao">          
     <img id="fotoConfirmacao" src="">          
     <h2 id="nomeConfirmacao"></h2>          
-  </div>
-    <button class="btn-voltar" onclick="voltarVotacao()">          
-    Votar novamente          
-  </button>          
-</div>
-  <script>          
-  let votoSelecionado = null;          
+  </div>    
+  <button class="btn-voltar" onclick="voltarVotacao()">Votar novamente</button>          
+</div>  
+
+<script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js"></script>
+<script>
+  // FIREBASE CONFIG
+  const firebaseConfig = {
+    apiKey: "SEU_API_KEY",
+    authDomain: "SEU_AUTH_DOMAIN",
+    databaseURL: "SUA_DATABASE_URL",
+    projectId: "SEU_PROJECT_ID",
+    storageBucket: "SEU_STORAGE_BUCKET",
+    messagingSenderId: "SEU_MESSAGING_ID",
+    appId: "SEU_APP_ID"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  let votoSelecionado = null;
   let fotoSelecionada = null;
-  let codigoCorreto = "0000";
-  let resultadosVisiveis = false;
 
-  function abrirVotacao() {      
-document.getElementById("areaVotacao").style.display = "block";      
-}
-
-  function selecionar(botao, nome) {    
-document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));    
-botao.classList.add("selecionado");
-  votoSelecionado = nome;  
-  fotoSelecionada = botao.querySelector("img").src;
+  function abrirVotacao() {
+      document.getElementById("areaVotacao").style.display = "block";
   }
 
-function confirmarVoto() {
-if (!votoSelecionado) return;
+  function selecionar(botao, nome) {
+      document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
+      botao.classList.add("selecionado");
+      votoSelecionado = nome;
+      fotoSelecionada = botao.querySelector("img").src;
+  }
 
-document.getElementById("bola").classList.add("ativa");
+  function confirmarVoto() {
+      if (!votoSelecionado) return;
+      document.getElementById("bola").classList.add("ativa");
 
-setTimeout(() => {
-votar(votoSelecionado); // função original do Firebase
+      // Atualizar contador no Firebase
+      const votoRef = db.ref('votos/' + votoSelecionado);
+      votoRef.transaction(current => (current || 0) + 1);
 
-document.getElementById("areaVotacao").style.display = "none";
-document.getElementById("telaConfirmacao").style.display = "block";
+      setTimeout(() => {
+          document.getElementById("areaVotacao").style.display = "none";
+          document.getElementById("telaConfirmacao").style.display = "block";
+          document.getElementById("fotoConfirmacao").src = fotoSelecionada;
+          document.getElementById("nomeConfirmacao").innerText = votoSelecionado;
+      }, 400);
+  }
 
-document.getElementById("fotoConfirmacao").src = fotoSelecionada;
-document.getElementById("nomeConfirmacao").innerText = votoSelecionado;
-}, 400);
+  function voltarVotacao() {
+      document.getElementById("telaConfirmacao").style.display = "none";
+      document.getElementById("areaVotacao").style.display = "block";
+      document.getElementById("bola").classList.remove("ativa");
+      document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
+      votoSelecionado = null;
+  }
 
-}
+  function mostrarResultado() {
+      const codigo = document.getElementById("codigoResultado").value;
+      if (codigo === "0000") {
+          const resultadoEl = document.getElementById("resultado");
+          resultadoEl.innerHTML = "";
+          ["Jogador 1", "Jogador 2"].forEach(j => {
+              const votoRef = db.ref('votos/' + j);
+              votoRef.on('value', snapshot => {
+                  const val = snapshot.val() || 0;
+                  resultadoEl.innerHTML += `${j}: ${val} votos<br>`;
+              });
+          });
+      } else {
+          alert("Código incorreto!");
+      }
+  }
 
-function voltarVotacao() {
-document.getElementById("telaConfirmacao").style.display = "none";
-document.getElementById("areaVotacao").style.display = "block";
-document.getElementById("bola").classList.remove("ativa");
-
-document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
-votoSelecionado = null;
-
-}
-
-function verificarCodigo() {
-    const codigoDigitado = document.getElementById("inputCodigo").value;
-    
-    if (codigoDigitado === codigoCorreto) {
-        document.getElementById("resultadosEscondidos").style.display = "none";
-        document.getElementById("resultadosVisiveis").style.display = "block";
-        resultadosVisiveis = true;
-        atualizarResultados();
-    } else {
-        alert("Código incorreto!");
-    }
-}
-
-function atualizarResultados() {
-    if (resultadosVisiveis) {
-        // Os resultados serão atualizados pelo Firebase
-    }
-}
+  // Atualização ao vivo dos contadores
+  ["Jogador 1", "Jogador 2"].forEach((j, index) => {
+      const contadorEl = document.getElementById(`contador${index+1}`);
+      const votoRef = db.ref('votos/' + j);
+      votoRef.on('value', snapshot => {
+          const val = snapshot.val() || 0;
+          contadorEl.innerText = `Pessoas votando no site: ${val}`;
+      });
+  });
 </script>
-  <script type="module" src="script.js"></script>
-  </body>
 
+</body>
 </html>
