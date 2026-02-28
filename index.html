@@ -3,107 +3,44 @@
 <head>
   <title>Votação</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: url("https://i.ibb.co/mCBrxzgs/Untitled770-20260214172706.png") no-repeat center center fixed;
-      background-size: cover;
+      background-color: #7E0A69;
       color: white;
+      text-align: center;
+    }
+
+    /* CONTADOR DE PESSOAS */
+    #contador {
+      font-size: 18px;
+      margin-top: 20px;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.7);
     }
 
     h1, h2, p {
       text-shadow: 0 2px 5px rgba(0,0,0,0.7);
     }
 
-    /* BARRA SUPERIOR */
-    .topo {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-      background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.8),
-        rgba(0,0,0,0.3)
-      );
-    }
-
-    .topo button {
-      min-width: 160px;
-      padding: 15px 20px;
-      border: none;
+    /* IMAGEM DE ABRIR VOTAÇÃO */
+    #abrirImagem {
+      margin-top: 30px;
+      cursor: pointer;
+      width: 200px;
       border-radius: 15px;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      color: white;
-      background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.6),
-        rgba(0,0,0,0)
-      );
+      transition: 0.2s;
     }
 
-    /* BOTÃO PERFIL */
-    .perfil-btn {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      background: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      overflow: hidden;
+    #abrirImagem:hover {
+      transform: scale(1.05);
     }
 
-    .perfil-btn img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-    }
-
-    /* ABA PERFIL */
-    .perfil-aba {
-      position: fixed;
-      top: 0;
-      right: -300px;
-      width: 300px;
-      height: 100%;
-      background: white;
-      color: black;
-      padding: 20px;
-      transition: 0.3s;
-      z-index: 9998;
-      box-shadow: -5px 0 15px rgba(0,0,0,0.4);
-    }
-
-    .perfil-aba.ativa {
-      right: 0;
-    }
-
-    .perfil-aba h2 {
-      margin-top: 40px;
-    }
-
-    .fechar-perfil {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: 22px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .conteudo {
-      padding: 20px;
-      text-align: center;
-    }
-
+    /* ÁREA DE VOTAÇÃO */
     .area-votacao {
       display: none;
+      padding: 20px;
+      text-align: center;
     }
 
     .opcoes {
@@ -126,12 +63,7 @@
       border-radius: 20px;
       cursor: pointer;
       color: black;
-      background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.25),
-        rgba(0,0,0,0)
-      ),
-      white;
+      background: linear-gradient(to top, rgba(0,0,0,0.25), rgba(0,0,0,0)), white;
       transition: 0.2s;
       position: relative;
     }
@@ -172,6 +104,31 @@
       background: limegreen;
     }
 
+    /* INPUT DE CÓDIGO */
+    #codigoContainer {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      align-items: center;
+    }
+
+    #codigoInput {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+    }
+
+    #verificarCodigo {
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* TELA DE CONFIRMAÇÃO */
     .tela-confirmacao {
       display: none;
       text-align: center;
@@ -179,12 +136,7 @@
     }
 
     .cartao-confirmacao {
-      background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.25),
-        rgba(0,0,0,0)
-      ),
-      white;
+      background: linear-gradient(to top, rgba(0,0,0,0.25), rgba(0,0,0,0)), white;
       color: black;
       border-radius: 20px;
       padding: 20px;
@@ -208,128 +160,110 @@
       cursor: pointer;
     }
 
-    /* LOGIN */
-
-    .login-tela {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.6));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-
-    .login-caixa {
-      background: white;
-      color: black;
-      padding: 30px;
-      border-radius: 20px;
-      width: 320px;
-      text-align: center;
-    }
-
-    .login-caixa input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border-radius: 12px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-
-    .login-caixa button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 15px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      background: black;
-      color: white;
-    }
   </style>
 </head>
-
 <body>
 
-<div class="topo">
-  <button onclick="abrirVotacao()">Votação</button>
+<div id="contador">Pessoas votando no site: 0</div>
 
-  <div class="perfil-btn" onclick="abrirPerfil()">
-    <img src="https://i.ibb.co/rRpfqfPv/12225881.png">
-  </div>
-</div>
-
-<div class="perfil-aba" id="perfilAba">
-  <div class="fechar-perfil" onclick="fecharPerfil()">✖</div>
-  <h2>Perfil</h2>
-  <p><strong>Usuário:</strong></p>
-  <p id="nomeUsuarioPerfil"></p>
-</div>
+<h1>Quem você vai votar?</h1>
+<img id="abrirImagem" src="https://i.ibb.co/6cyVhnwV/Untitled778-20260228180906.png" alt="Abrir Votação" onclick="abrirVotacao()">
 
 <div class="conteudo area-votacao" id="areaVotacao">
   <h1>Vote em quem deve sair</h1>
+  <div class="opcoes">
+    <button class="botao-voto" onclick="selecionar(this, 'Jogador 1')">
+      <img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">
+      Jogador 1
+    </button>
+    <button class="botao-voto" onclick="selecionar(this, 'Jogador 2')">
+      <img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">
+      Jogador 2
+    </button>
+  </div>
+
+  <div class="confirmar" onclick="confirmarVoto()">
+    <div class="bola" id="bola"></div>
+    Confirmar voto
+  </div>
+
+  <div id="codigoContainer">
+    <input type="text" id="codigoInput" placeholder="Digite o código">
+    <button id="verificarCodigo" onclick="verificarCodigo()">Verificar</button>
+  </div>
+
+  <h2>Resultados:</h2>
+  <p id="resultado"></p>
 </div>
 
-<!-- LOGIN -->
-<div class="login-tela" id="loginTela">
-  <div class="login-caixa">
-    <h2>Criar Conta</h2>
-    <input type="text" id="usuarioInput" placeholder="Nome de usuário">
-    <input type="password" id="senhaInput" placeholder="Senha">
-    <button onclick="criarOuEntrar()">Entrar</button>
-    <p id="loginErro" style="color:red; font-size:14px;"></p>
+<!-- TELA APÓS VOTO -->
+<div class="tela-confirmacao" id="telaConfirmacao">
+  <div class="cartao-confirmacao">
+    <img id="fotoConfirmacao" src="">
+    <h2 id="nomeConfirmacao"></h2>
   </div>
+  <button class="btn-voltar" onclick="voltarVotacao()">
+    Votar novamente
+  </button>
 </div>
 
 <script>
-function abrirPerfil() {
-  document.getElementById("perfilAba").classList.add("ativa");
-}
+  let votoSelecionado = null;
+  let fotoSelecionada = null;
+  let resultadoVotacao = "";
 
-function fecharPerfil() {
-  document.getElementById("perfilAba").classList.remove("ativa");
-}
+  // CONTADOR SIMULADO
+  let pessoasVotando = 0;
+  setInterval(() => {
+    document.getElementById("contador").innerText = `Pessoas votando no site: ${pessoasVotando}`;
+  }, 1000);
 
-function criarOuEntrar() {
-  const usuario = document.getElementById("usuarioInput").value.trim();
-  const senha = document.getElementById("senhaInput").value.trim();
-  const erro = document.getElementById("loginErro");
-
-  if (!usuario || !senha) {
-    erro.innerText = "Preencha todos os campos.";
-    return;
+  function abrirVotacao() {
+    document.getElementById("areaVotacao").style.display = "block";
+    pessoasVotando++;
   }
 
-  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || {};
+  function selecionar(botao, nome) {
+    document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
+    botao.classList.add("selecionado");
+    votoSelecionado = nome;
+    fotoSelecionada = botao.querySelector("img").src;
+  }
 
-  if (usuarios[usuario]) {
-    if (usuarios[usuario] !== senha) {
-      erro.innerText = "Senha incorreta.";
-      return;
+  function confirmarVoto() {
+    if (!votoSelecionado) return;
+
+    document.getElementById("bola").classList.add("ativa");
+
+    setTimeout(() => {
+      resultadoVotacao = `${votoSelecionado} recebeu votos!`;
+
+      document.getElementById("areaVotacao").style.display = "none";
+      document.getElementById("telaConfirmacao").style.display = "block";
+
+      document.getElementById("fotoConfirmacao").src = fotoSelecionada;
+      document.getElementById("nomeConfirmacao").innerText = votoSelecionado;
+    }, 400);
+  }
+
+  function voltarVotacao() {
+    document.getElementById("telaConfirmacao").style.display = "none";
+    document.getElementById("areaVotacao").style.display = "block";
+    document.getElementById("bola").classList.remove("ativa");
+
+    document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
+    votoSelecionado = null;
+  }
+
+  function verificarCodigo() {
+    const codigo = document.getElementById("codigoInput").value;
+    if (codigo === "0000") {
+      document.getElementById("resultado").innerText = resultadoVotacao || "Ainda não houve votos.";
+    } else {
+      alert("Código incorreto!");
     }
-  } else {
-    usuarios[usuario] = senha;
-    localStorage.setItem("usuarios", JSON.stringify(usuarios));
   }
-
-  localStorage.setItem("usuarioLogado", usuario);
-  document.getElementById("loginTela").style.display = "none";
-  document.getElementById("nomeUsuarioPerfil").innerText = usuario;
-}
-
-window.onload = function() {
-  const usuario = localStorage.getItem("usuarioLogado");
-  if (usuario) {
-    document.getElementById("loginTela").style.display = "none";
-    document.getElementById("nomeUsuarioPerfil").innerText = usuario;
-  }
-}
 </script>
-
-<script type="module" src="script.js"></script>
 
 </body>
 </html>
