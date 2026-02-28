@@ -235,28 +235,64 @@
         </button>            
     </div>  
 
-    <script>
-        let votoSelecionado = null;            
+    <!-- FIREBASE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC8PSXTyOxn_kgyFzpn-Qw3EGUXdS7BGOo",
+            authDomain: "feature-8e659.firebaseapp.com",
+            databaseURL: "https://feature-8e659-default-rtdb.firebaseio.com",
+            projectId: "feature-8e659",
+            storageBucket: "feature-8e659.firebasestorage.app",
+            messagingSenderId: "755676249847",
+            appId: "1:755676249847:web:2a01bda6f99d6e32b7ddf2",
+            measurementId: "G-LN21J71XEV"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // =======================
+        // VOTAÇÃO
+        // =======================
+        window.votar = async function(nome) {
+            const votoRef = ref(db, "votos/" + nome);
+            const snapshot = await get(votoRef);
+
+            let votos = 0;
+            if (snapshot.exists()) {
+                votos = snapshot.val();
+            }
+
+            set(votoRef, votos + 1);
+        };
+
+        // =======================
+        // FUNÇÕES DE VOTAÇÃO
+        // =======================
+        let votoSelecionado = null;
         let fotoSelecionada = null;
 
-        function abrirVotacao() {        
-            document.getElementById("areaVotacao").style.display = "block";        
-        }
+        window.abrirVotacao = function() {
+            document.getElementById("areaVotacao").style.display = "block";
+        };
 
-        function selecionar(botao, nome) {      
-            document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));      
-            botao.classList.add("selecionado");  
-            votoSelecionado = nome;    
-            fotoSelecionada = botao.querySelector("img").src;  
-        }
+        window.selecionar = function(botao, nome) {
+            document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
+            botao.classList.add("selecionado");
+            votoSelecionado = nome;
+            fotoSelecionada = botao.querySelector("img").src;
+        };
 
-        function confirmarVoto() {
+        window.confirmarVoto = function() {
             if (!votoSelecionado) return;
 
             document.getElementById("bola").classList.add("ativa");
 
             setTimeout(() => {
-                votar(votoSelecionado); // função original do Firebase
+                votar(votoSelecionado);
 
                 document.getElementById("areaVotacao").style.display = "none";
                 document.getElementById("telaConfirmacao").style.display = "block";
@@ -264,29 +300,37 @@
                 document.getElementById("fotoConfirmacao").src = fotoSelecionada;
                 document.getElementById("nomeConfirmacao").innerText = votoSelecionado;
             }, 400);
-        }
+        };
 
-        function voltarVotacao() {
+        window.voltarVotacao = function() {
             document.getElementById("telaConfirmacao").style.display = "none";
             document.getElementById("areaVotacao").style.display = "block";
             document.getElementById("bola").classList.remove("ativa");
 
             document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
             votoSelecionado = null;
-        }
+        };
 
-        // FUNÇÃO PARA VERIFICAR CÓDIGO
-        function verificarCodigo() {
+        // =======================
+        // FUNÇÃO DE VERIFICAR CÓDIGO E MOSTRAR RESULTADO
+        // =======================
+        window.verificarCodigo = function() {
             const codigo = document.getElementById("codigoInput").value;
-            if(codigo === "0000") {
-                // MOSTRA RESULTADO AO VIVO
-                document.getElementById("resultado").innerText = "Resultado ao vivo: Jogador 1 - 3 votos | Jogador 2 - 5 votos"; 
+            if (codigo === "0000") {
+                const resultadoRef = ref(db, "votos");
+                get(resultadoRef).then(snapshot => {
+                    if (snapshot.exists()) {
+                        let texto = "";
+                        snapshot.forEach(child => {
+                            texto += child.key + ": " + child.val() + " votos<br>";
+                        });
+                        document.getElementById("resultado").innerHTML = texto;
+                    }
+                });
             } else {
                 document.getElementById("resultado").innerText = "Código incorreto!";
             }
-        }
-    </script>  
-
-    <script type="module" src="script.js"></script>  
+        };
+    </script>
 </body>
 </html>
