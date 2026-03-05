@@ -1,313 +1,293 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Votação</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: url("https://i.ibb.co/mCBrxzgs/Untitled770-20260214172706.png") no-repeat center center fixed;
-            background-size: cover;
-            color: white;
-        }
+<title>Votação</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        h1, h2, p {
-            text-shadow: 0 2px 5px rgba(0,0,0,0.7);
-        }
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url("https://i.ibb.co/mCBrxzgs/Untitled770-20260214172706.png") no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+}
 
-        .topo {
-            display: flex;
-            gap: 15px;
-            padding: 10px;
-            overflow-x: auto;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.3));
-        }
+h1, h2, p {
+    text-shadow: 0 2px 5px rgba(0,0,0,0.7);
+}
 
-        .topo button {
-            min-width: 160px;
-            padding: 15px 20px;
-            border: none;
-            border-radius: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            color: white;
-            background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0));
-        }
+.topo {
+    display: flex;
+    gap: 15px;
+    padding: 10px;
+    overflow-x: auto;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.3));
+}
 
-        .conteudo {
-            padding: 20px;
-            text-align: center;
-        }
+.topo button {
+    min-width: 160px;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0));
+}
 
-        .area-votacao {
-            display: none;
-        }
+.conteudo {
+    padding: 20px;
+    text-align: center;
+}
 
-        .opcoes {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            max-width: 600px;
-            margin: auto;
-        }
+.area-votacao {
+    display: none;
+}
 
-        .botao-voto {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 20px;
-            height: 110px;
-            font-size: 22px;
-            font-weight: bold;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            color: black;
-            background: linear-gradient(to top, rgba(0,0,0,0.25), rgba(0,0,0,0)), white;
-            transition: 0.2s;
-        }
+.opcoes {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 600px;
+    margin: auto;
+}
 
-        .botao-voto img {
-            width: 80px;
-            height: 80px;
-            border-radius: 12px;
-            object-fit: cover;
-        }
+.botao-voto {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    height: 110px;
+    font-size: 22px;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    color: black;
+    background: white;
+    transition: 0.2s;
+}
 
-        .botao-voto.selecionado {
-            outline: 4px solid #6b3e2e;
-        }
+.botao-voto img {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+}
 
-        .confirmar {
-            margin-top: 25px;
-            padding: 10px 20px;
-            border-radius: 20px;
-            background: white;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            color: black;
-            font-weight: bold;
-        }
+.botao-voto.selecionado {
+    outline: 4px solid #6b3e2e;
+}
 
-        .bola {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: gray;
-            transition: 0.2s;
-        }
+.confirmar {
+    margin-top: 25px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    background: white;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: black;
+    font-weight: bold;
+}
 
-        .bola.ativa {
-            background: limegreen;
-        }
+.bola {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: gray;
+    transition: 0.2s;
+}
 
-        .tela-confirmacao {
-            display: none;
-            text-align: center;
-            padding: 40px 20px;
-        }
+.bola.ativa {
+    background: limegreen;
+}
 
-        .cartao-confirmacao {
-            background: linear-gradient(to top, rgba(0,0,0,0.25), rgba(0,0,0,0)), white;
-            color: black;
-            border-radius: 20px;
-            padding: 20px;
-            max-width: 400px;
-            margin: auto;
-        }
+.tela-confirmacao {
+    display: none;
+    text-align: center;
+    padding: 40px 20px;
+}
 
-        .cartao-confirmacao img {
-            width: 120px;
-            height: 120px;
-            border-radius: 15px;
-            object-fit: cover;
-        }
+.cartao-confirmacao {
+    background: white;
+    color: black;
+    border-radius: 20px;
+    padding: 20px;
+    max-width: 400px;
+    margin: auto;
+}
 
-        .btn-voltar {
-            margin-top: 20px;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 15px;
-            font-size: 18px;
-            cursor: pointer;
-        }
+.cartao-confirmacao img {
+    width: 120px;
+    height: 120px;
+    border-radius: 15px;
+    object-fit: cover;
+}
 
-        .codigo-container {
-            margin-top: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
+.btn-voltar {
+    margin-top: 20px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 15px;
+    font-size: 18px;
+    cursor: pointer;
+}
 
-        .codigo-container input {
-            padding: 8px;
-            border-radius: 8px;
-            border: none;
-            width: 80px;
-            font-size: 16px;
-            text-align: center;
-        }
+.codigo-container {
+    margin-top: 20px;
+}
 
-        .codigo-container button {
-            padding: 8px 15px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        #resultado {
-            margin-top: 15px;
-            font-size: 18px;
-        }
-    </style>
+#resultado {
+    margin-top: 15px;
+    font-size: 18px;
+}
+</style>
 </head>
+
 <body>
-    <div class="topo">
-        <button onclick="abrirVotacao()">Votação</button>
+
+<div class="topo">
+    <button onclick="abrirVotacao()">Votação</button>
+</div>
+
+<div class="conteudo area-votacao" id="areaVotacao">
+    <h1>Vote em quem deve sair</h1>
+
+    <div class="opcoes">
+
+        <button class="botao-voto" onclick="selecionar(this,'millie')">
+            <img src="https://i.ibb.co/Z9DMC2S/Untitled766-20260301204421.png">
+            millie
+        </button>
+
+        <button class="botao-voto" onclick="selecionar(this,'Magnata')">
+            <img src="https://i.ibb.co/G4YTtX8v/Untitled766-20260301204626.png">
+            Magnata
+        </button>
+
+        <button class="botao-voto" onclick="selecionar(this,'Luiza')">
+            <img src="https://i.ibb.co/HTYfN3nm/Untitled766-20260301204705.png">
+            Luiza
+        </button>
+
+        <button class="botao-voto" onclick="selecionar(this,'Claubs')">
+            <img src="https://i.ibb.co/20Wq0bkT/Untitled766-20260301204832.png">
+            Claubs
+        </button>
+
     </div>
 
-    <div class="conteudo area-votacao" id="areaVotacao">            
-        <h1>Vote em quem deve sair</h1>
-        <div class="opcoes">            
+    <div class="confirmar" onclick="confirmarVoto()">
+        <div class="bola" id="bola"></div>
+        Confirmar voto
+    </div>
 
-            <button class="botao-voto" onclick="selecionar(this, 'millie')">            
-                <img src="https://i.ibb.co/Z9DMC2S/Untitled766-20260301204421.png">            
-                millie            
-            </button>
+    <div class="codigo-container">
+        <input type="text" id="codigoInput" placeholder="Código">
+        <button onclick="verificarCodigo()">Ver Resultados</button>
+    </div>
 
-            <button class="botao-voto" onclick="selecionar(this, 'Magnata')">            
-                <img src="https://i.ibb.co/G4YTtX8v/Untitled766-20260301204626.png">            
-                Magnata            
-            </button>
+    <h2>Resultados:</h2>
+    <p id="resultado"></p>
+</div>
 
-            <button class="botao-voto" onclick="selecionar(this, 'Luiza')">            
-                <img src="https://i.ibb.co/HTYfN3nm/Untitled766-20260301204705.png">            
-                Luiza            
-            </button>
+<div class="tela-confirmacao" id="telaConfirmacao">
+    <div class="cartao-confirmacao">
+        <img id="fotoConfirmacao">
+        <h2 id="nomeConfirmacao"></h2>
+    </div>
+    <button class="btn-voltar" onclick="voltarVotacao()">Votar novamente</button>
+</div>
 
-            <button class="botao-voto" onclick="selecionar(this, 'Claubs')">            
-                <img src="https://i.ibb.co/20Wq0bkT/Untitled766-20260301204832.png">            
-                Claubs            
-            </button>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
-        </div>    
+const firebaseConfig = {
+    apiKey: "AIzaSyC8PSXTyOxn_kgyFzpn-Qw3EGUXdS7BGOo",
+    authDomain: "feature-8e659.firebaseapp.com",
+    databaseURL: "https://feature-8e659-default-rtdb.firebaseio.com",
+    projectId: "feature-8e659",
+    storageBucket: "feature-8e659.firebasestorage.app",
+    messagingSenderId: "755676249847",
+    appId: "1:755676249847:web:2a01bda6f99d6e32b7ddf2"
+};
 
-        <div class="confirmar" onclick="confirmarVoto()">            
-            <div class="bola" id="bola"></div>            
-            Confirmar voto            
-        </div>    
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-        <div class="codigo-container">
-            <input type="text" id="codigoInput" placeholder="Código">
-            <button onclick="verificarCodigo()">Verificar</button>
-        </div>
+const participantes = ["millie","Magnata","Luiza","Claubs"];
 
-        <h2>Resultados:</h2>            
-        <p id="resultado"></p>            
-    </div>  
+let votoSelecionado = null;
+let fotoSelecionada = null;
 
-    <div class="tela-confirmacao" id="telaConfirmacao">            
-        <div class="cartao-confirmacao">            
-            <img id="fotoConfirmacao" src="">            
-            <h2 id="nomeConfirmacao"></h2>            
-        </div>    
-        <button class="btn-voltar" onclick="voltarVotacao()">            
-            Votar novamente            
-        </button>            
-    </div>  
+window.abrirVotacao = function(){
+    document.getElementById("areaVotacao").style.display = "block";
+};
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+window.selecionar = function(botao,nome){
+    document.querySelectorAll(".botao-voto").forEach(b=>b.classList.remove("selecionado"));
+    botao.classList.add("selecionado");
+    votoSelecionado = nome;
+    fotoSelecionada = botao.querySelector("img").src;
+};
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyC8PSXTyOxn_kgyFzpn-Qw3EGUXdS7BGOo",
-            authDomain: "feature-8e659.firebaseapp.com",
-            databaseURL: "https://feature-8e659-default-rtdb.firebaseio.com",
-            projectId: "feature-8e659",
-            storageBucket: "feature-8e659.firebasestorage.app",
-            messagingSenderId: "755676249847",
-            appId: "1:755676249847:web:2a01bda6f99d6e32b7ddf2",
-            measurementId: "G-LN21J71XEV"
-        };
+async function votar(nome){
+    const votoRef = ref(db,"votos/"+nome);
+    const snap = await get(votoRef);
+    let total = snap.exists()? snap.val():0;
+    await set(votoRef,total+1);
+}
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+window.confirmarVoto = async function(){
+    if(!votoSelecionado) return;
+    document.getElementById("bola").classList.add("ativa");
 
-        window.votar = async function(nome) {
-            const votoRef = ref(db, "votos/" + nome);
-            const snapshot = await get(votoRef);
+    setTimeout(async ()=>{
+        await votar(votoSelecionado);
+        document.getElementById("areaVotacao").style.display="none";
+        document.getElementById("telaConfirmacao").style.display="block";
+        document.getElementById("fotoConfirmacao").src=fotoSelecionada;
+        document.getElementById("nomeConfirmacao").innerText=votoSelecionado;
+    },400);
+};
 
-            let votos = 0;
-            if (snapshot.exists()) {
-                votos = snapshot.val();
-            }
+window.voltarVotacao=function(){
+    document.getElementById("telaConfirmacao").style.display="none";
+    document.getElementById("areaVotacao").style.display="block";
+    document.getElementById("bola").classList.remove("ativa");
+    document.querySelectorAll(".botao-voto").forEach(b=>b.classList.remove("selecionado"));
+    votoSelecionado=null;
+};
 
-            set(votoRef, votos + 1);
-        };
+window.verificarCodigo=async function(){
+    const codigo=document.getElementById("codigoInput").value;
+    if(codigo!=="0000"){
+        document.getElementById("resultado").innerText="Código incorreto!";
+        return;
+    }
 
-        let votoSelecionado = null;
-        let fotoSelecionada = null;
+    const snap=await get(ref(db,"votos"));
+    let dados=snap.exists()?snap.val():{};
 
-        window.abrirVotacao = function() {
-            document.getElementById("areaVotacao").style.display = "block";
-        };
+    participantes.forEach(p=>{
+        if(!dados[p]) dados[p]=0;
+    });
 
-        window.selecionar = function(botao, nome) {
-            document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
-            botao.classList.add("selecionado");
-            votoSelecionado = nome;
-            fotoSelecionada = botao.querySelector("img").src;
-        };
+    const ordenado=Object.entries(dados).sort((a,b)=>b[1]-a[1]);
 
-        window.confirmarVoto = function() {
-            if (!votoSelecionado) return;
+    let texto="";
+    ordenado.forEach(item=>{
+        texto+=item[0]+": "+item[1]+" votos<br>";
+    });
 
-            document.getElementById("bola").classList.add("ativa");
+    document.getElementById("resultado").innerHTML=texto;
+};
+</script>
 
-            setTimeout(() => {
-                votar(votoSelecionado);
-
-                document.getElementById("areaVotacao").style.display = "none";
-                document.getElementById("telaConfirmacao").style.display = "block";
-
-                document.getElementById("fotoConfirmacao").src = fotoSelecionada;
-                document.getElementById("nomeConfirmacao").innerText = votoSelecionado;
-            }, 400);
-        };
-
-        window.voltarVotacao = function() {
-            document.getElementById("telaConfirmacao").style.display = "none";
-            document.getElementById("areaVotacao").style.display = "block";
-            document.getElementById("bola").classList.remove("ativa");
-
-            document.querySelectorAll(".botao-voto").forEach(b => b.classList.remove("selecionado"));
-            votoSelecionado = null;
-        };
-
-        window.verificarCodigo = function() {
-            const codigo = document.getElementById("codigoInput").value;
-            if (codigo === "0000") {
-                const resultadoRef = ref(db, "votos");
-                get(resultadoRef).then(snapshot => {
-                    if (snapshot.exists()) {
-                        let texto = "";
-                        snapshot.forEach(child => {
-                            texto += child.key + ": " + child.val() + " votos<br>";
-                        });
-                        document.getElementById("resultado").innerHTML = texto;
-                    }
-                });
-            } else {
-                document.getElementById("resultado").innerText = "Código incorreto!";
-            }
-        };
-    </script>
 </body>
 </html>
