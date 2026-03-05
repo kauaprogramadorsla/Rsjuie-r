@@ -16,7 +16,6 @@
             text-shadow: 0 2px 5px rgba(0,0,0,0.7);
         }
 
-        /* BARRA SUPERIOR */
         .topo {
             display: flex;
             gap: 15px;
@@ -62,7 +61,6 @@
             margin: auto;
         }
 
-        /* RETÂNGULO DE VOTO */
         .botao-voto {
             display: flex;
             align-items: center;
@@ -96,7 +94,6 @@
             outline: 4px solid #6b3e2e;
         }
 
-        /* BOTÃO CONFIRMAR */
         .confirmar {
             margin-top: 25px;
             padding: 10px 20px;
@@ -122,7 +119,6 @@
             background: limegreen;
         }
 
-        /* TELA DE CONFIRMAÇÃO */
         .tela-confirmacao {
             display: none;
             text-align: center;
@@ -159,7 +155,6 @@
             cursor: pointer;
         }
 
-        /* CAMPO DE CÓDIGO */
         .codigo-container {
             margin-top: 15px;
             display: flex;
@@ -200,21 +195,30 @@
     <div class="conteudo area-votacao" id="areaVotacao">            
         <h1>Vote em quem deve sair</h1>
         <div class="opcoes">            
+
             <button class="botao-voto" onclick="selecionar(this, 'Jogador 1')">            
                 <img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">            
                 Jogador 1            
             </button>
+
             <button class="botao-voto" onclick="selecionar(this, 'Jogador 2')">            
                 <img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">            
                 Jogador 2            
             </button>    
+
+            <!-- NOVA OPÇÃO -->
+            <button class="botao-voto" onclick="selecionar(this, 'millie')">            
+                <img src="https://i.ibb.co/Z9DMC2S/Untitled766-20260301204421.png">            
+                millie            
+            </button>
+
         </div>    
+
         <div class="confirmar" onclick="confirmarVoto()">            
             <div class="bola" id="bola"></div>            
             Confirmar voto            
         </div>    
 
-        <!-- CAMPO DE CÓDIGO -->
         <div class="codigo-container">
             <input type="text" id="codigoInput" placeholder="Código">
             <button onclick="verificarCodigo()">Verificar</button>
@@ -224,7 +228,6 @@
         <p id="resultado"></p>            
     </div>  
 
-    <!-- TELA APÓS VOTO -->
     <div class="tela-confirmacao" id="telaConfirmacao">            
         <div class="cartao-confirmacao">            
             <img id="fotoConfirmacao" src="">            
@@ -235,7 +238,6 @@
         </button>            
     </div>  
 
-    <!-- FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
         import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
@@ -254,9 +256,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // =======================
-        // VOTAÇÃO
-        // =======================
         window.votar = async function(nome) {
             const votoRef = ref(db, "votos/" + nome);
             const snapshot = await get(votoRef);
@@ -269,9 +268,6 @@
             set(votoRef, votos + 1);
         };
 
-        // =======================
-        // FUNÇÕES DE VOTAÇÃO
-        // =======================
         let votoSelecionado = null;
         let fotoSelecionada = null;
 
@@ -311,9 +307,6 @@
             votoSelecionado = null;
         };
 
-        // =======================
-        // FUNÇÃO DE VERIFICAR CÓDIGO E MOSTRAR RESULTADO
-        // =======================
         window.verificarCodigo = function() {
             const codigo = document.getElementById("codigoInput").value;
             if (codigo === "0000") {
