@@ -21,11 +21,7 @@
             gap: 15px;
             padding: 10px;
             overflow-x: auto;
-            background: linear-gradient(
-                to top,
-                rgba(0,0,0,0.8),
-                rgba(0,0,0,0.3)
-            );
+            background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.3));
         }
 
         .topo button {
@@ -37,11 +33,7 @@
             font-weight: bold;
             cursor: pointer;
             color: white;
-            background: linear-gradient(
-                to top,
-                rgba(0,0,0,0.6),
-                rgba(0,0,0,0)
-            );
+            background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0));
         }
 
         .conteudo {
@@ -73,14 +65,8 @@
             border-radius: 20px;
             cursor: pointer;
             color: black;
-            background: linear-gradient(
-                to top,
-                rgba(0,0,0,0.25),
-                rgba(0,0,0,0)
-            ),
-            white;
+            background: linear-gradient(to top, rgba(0,0,0,0.25), rgba(0,0,0,0)), white;
             transition: 0.2s;
-            position: relative;
         }
 
         .botao-voto img {
@@ -126,12 +112,7 @@
         }
 
         .cartao-confirmacao {
-            background: linear-gradient(
-                to top,
-                rgba(0,0,0,0.25),
-                rgba(0,0,0,0)
-            ),
-            white;
+            background: linear-gradient(to top, rgba(0,0,0,0.25), rgba(0,0,0,0)), white;
             color: black;
             border-radius: 20px;
             padding: 20px;
@@ -184,7 +165,6 @@
             margin-top: 15px;
             font-size: 18px;
         }
-
     </style>
 </head>
 <body>
@@ -196,20 +176,24 @@
         <h1>Vote em quem deve sair</h1>
         <div class="opcoes">            
 
-            <button class="botao-voto" onclick="selecionar(this, 'Jogador 1')">            
-                <img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">            
-                Jogador 1            
-            </button>
-
-            <button class="botao-voto" onclick="selecionar(this, 'Jogador 2')">            
-                <img src="https://i.ibb.co/CFYbzsR/Untitled766-20260214180226.png">            
-                Jogador 2            
-            </button>    
-
-            <!-- NOVA OPÇÃO -->
             <button class="botao-voto" onclick="selecionar(this, 'millie')">            
                 <img src="https://i.ibb.co/Z9DMC2S/Untitled766-20260301204421.png">            
                 millie            
+            </button>
+
+            <button class="botao-voto" onclick="selecionar(this, 'Magnata')">            
+                <img src="https://i.ibb.co/G4YTtX8v/Untitled766-20260301204626.png">            
+                Magnata            
+            </button>
+
+            <button class="botao-voto" onclick="selecionar(this, 'Luiza')">            
+                <img src="https://i.ibb.co/HTYfN3nm/Untitled766-20260301204705.png">            
+                Luiza            
+            </button>
+
+            <button class="botao-voto" onclick="selecionar(this, 'Claubs')">            
+                <img src="https://i.ibb.co/20Wq0bkT/Untitled766-20260301204832.png">            
+                Claubs            
             </button>
 
         </div>    
