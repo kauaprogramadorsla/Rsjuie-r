@@ -189,6 +189,16 @@ h1, h2, p {
             Ana mary
         </button>
 
+        <button class="botao-voto" onclick="selecionar(this,'Gaby e soso')">
+            <img src="https://i.ibb.co/KjtMx74r/Untitled766-20260301205002.png">
+            Gaby e soso
+        </button>
+
+        <button class="botao-voto" onclick="selecionar(this,'Lily')">
+            <img src="https://i.ibb.co/gLJq430q/Untitled766-20260301204932.png">
+            Lily
+        </button>
+
     </div>
 
     <div class="confirmar" onclick="confirmarVoto()">
@@ -230,72 +240,67 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const participantes = ["millie","Magnata","Luiza","Claubs","Pepsi","Ana mary"];
+const participantes = [
+"millie","Magnata","Luiza","Claubs",
+"Pepsi","Ana mary","Gaby e soso","Lily"
+];
 
-let votoSelecionado = null;
-let fotoSelecionada = null;
+let votoSelecionado=null;
+let fotoSelecionada=null;
 
-window.abrirVotacao = function(){
-    document.getElementById("areaVotacao").style.display = "block";
+window.abrirVotacao=()=>{
+document.getElementById("areaVotacao").style.display="block";
 };
 
-window.selecionar = function(botao,nome){
-    document.querySelectorAll(".botao-voto").forEach(b=>b.classList.remove("selecionado"));
-    botao.classList.add("selecionado");
-    votoSelecionado = nome;
-    fotoSelecionada = botao.querySelector("img").src;
+window.selecionar=(botao,nome)=>{
+document.querySelectorAll(".botao-voto").forEach(b=>b.classList.remove("selecionado"));
+botao.classList.add("selecionado");
+votoSelecionado=nome;
+fotoSelecionada=botao.querySelector("img").src;
 };
 
 async function votar(nome){
-    const votoRef = ref(db,"votos/"+nome);
-    const snap = await get(votoRef);
-    let total = snap.exists()? snap.val():0;
-    await set(votoRef,total+1);
+const votoRef=ref(db,"votos/"+nome);
+const snap=await get(votoRef);
+let total=snap.exists()?snap.val():0;
+await set(votoRef,total+1);
 }
 
-window.confirmarVoto = async function(){
-    if(!votoSelecionado) return;
-    document.getElementById("bola").classList.add("ativa");
-
-    setTimeout(async ()=>{
-        await votar(votoSelecionado);
-        document.getElementById("areaVotacao").style.display="none";
-        document.getElementById("telaConfirmacao").style.display="block";
-        document.getElementById("fotoConfirmacao").src=fotoSelecionada;
-        document.getElementById("nomeConfirmacao").innerText=votoSelecionado;
-    },400);
+window.confirmarVoto=async()=>{
+if(!votoSelecionado) return;
+document.getElementById("bola").classList.add("ativa");
+setTimeout(async()=>{
+await votar(votoSelecionado);
+document.getElementById("areaVotacao").style.display="none";
+document.getElementById("telaConfirmacao").style.display="block";
+document.getElementById("fotoConfirmacao").src=fotoSelecionada;
+document.getElementById("nomeConfirmacao").innerText=votoSelecionado;
+},400);
 };
 
-window.voltarVotacao=function(){
-    document.getElementById("telaConfirmacao").style.display="none";
-    document.getElementById("areaVotacao").style.display="block";
-    document.getElementById("bola").classList.remove("ativa");
-    document.querySelectorAll(".botao-voto").forEach(b=>b.classList.remove("selecionado"));
-    votoSelecionado=null;
+window.voltarVotacao=()=>{
+document.getElementById("telaConfirmacao").style.display="none";
+document.getElementById("areaVotacao").style.display="block";
+document.getElementById("bola").classList.remove("ativa");
+document.querySelectorAll(".botao-voto").forEach(b=>b.classList.remove("selecionado"));
+votoSelecionado=null;
 };
 
-window.verificarCodigo=async function(){
-    const codigo=document.getElementById("codigoInput").value;
-    if(codigo!=="0000"){
-        document.getElementById("resultado").innerText="Código incorreto!";
-        return;
-    }
-
-    const snap=await get(ref(db,"votos"));
-    let dados=snap.exists()?snap.val():{};
-
-    participantes.forEach(p=>{
-        if(!dados[p]) dados[p]=0;
-    });
-
-    const ordenado=Object.entries(dados).sort((a,b)=>b[1]-a[1]);
-
-    let texto="";
-    ordenado.forEach(item=>{
-        texto+=item[0]+": "+item[1]+" votos<br>";
-    });
-
-    document.getElementById("resultado").innerHTML=texto;
+window.verificarCodigo=async()=>{
+const codigo=document.getElementById("codigoInput").value;
+if(codigo!=="0000"){
+document.getElementById("resultado").innerText="Código incorreto!";
+return;
+}
+const snap=await get(ref(db,"votos"));
+let dados=snap.exists()?snap.val():{};
+participantes.forEach(p=>{if(!dados[p]) dados[p]=0;});
+const ordenado=Object.entries(dados).sort((a,b)=>b[1]-a[1]);
+let texto="";
+ordenado.forEach(item=>{
+texto+=item[0]+": "+item[1]+" votos<br>";
+});
+document.getElementById("resultado").innerHTML=texto;
 };
 </script>
 
