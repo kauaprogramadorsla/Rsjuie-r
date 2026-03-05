@@ -24,9 +24,20 @@ const db = getDatabase(app);
 const auth = getAuth(app);
 
 
+
 // =======================
-// SISTEMA DE VOTAÇÃO
+// 🔥 SISTEMA DE VOTAÇÃO
 // =======================
+
+// FUNÇÃO PARA RESETAR VOTOS (NOVA)
+window.resetarVotacao = async function() {
+  const votosRef = ref(db, "votos");
+  await set(votosRef, null);
+  alert("Votação resetada!");
+};
+
+
+// FUNÇÃO DE VOTAR
 window.votar = async function(nome) {
   const votoRef = ref(db, "votos/" + nome);
   const snapshot = await get(votoRef);
@@ -36,28 +47,39 @@ window.votar = async function(nome) {
     votos = snapshot.val();
   }
 
-  set(votoRef, votos + 1);
+  await set(votoRef, votos + 1);
 };
 
+
+// RESULTADO AO VIVO (CORRIGIDO)
 const resultadoRef = ref(db, "votos");
+
 onValue(resultadoRef, (snapshot) => {
+
+  const resultado = document.getElementById("resultado");
+  if (!resultado) return;
+
+  if (!snapshot.exists()) {
+    resultado.innerHTML = "Nenhum voto ainda.";
+    return;
+  }
+
   let texto = "";
+
   snapshot.forEach((child) => {
     texto += child.key + ": " + child.val() + " votos<br>";
   });
 
-  const resultado = document.getElementById("resultado");
-  if (resultado) {
-    resultado.innerHTML = texto;
-  }
+  resultado.innerHTML = texto;
 });
 
 
+
 // =======================
-// SISTEMA DE LOGIN
+// 🔐 SISTEMA DE LOGIN
 // =======================
 
-// criar conta
+// CRIAR CONTA
 window.criarConta = function () {
   const email = document.getElementById("email").value;
   const senha = document.getElementById("senha").value;
@@ -71,7 +93,8 @@ window.criarConta = function () {
     });
 };
 
-// entrar
+
+// ENTRAR
 window.entrar = function () {
   const email = document.getElementById("email").value;
   const senha = document.getElementById("senha").value;
@@ -82,7 +105,8 @@ window.entrar = function () {
     });
 };
 
-// verificar login
+
+// VERIFICAR LOGIN
 onAuthStateChanged(auth, user => {
   const areaLogin = document.getElementById("areaLogin");
   const areaVotacao = document.getElementById("areaVotacao");
