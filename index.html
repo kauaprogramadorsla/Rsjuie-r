@@ -179,6 +179,16 @@ h1, h2, p {
             Claubs
         </button>
 
+        <button class="botao-voto" onclick="selecionar(this,'Pepsi')">
+            <img src="https://i.ibb.co/8pKkVxY/Untitled766-20260301204910.png">
+            Pepsi
+        </button>
+
+        <button class="botao-voto" onclick="selecionar(this,'Ana mary')">
+            <img src="https://i.ibb.co/WpHMHRXs/Untitled766-20260301204851.png">
+            Ana mary
+        </button>
+
     </div>
 
     <div class="confirmar" onclick="confirmarVoto()">
@@ -220,7 +230,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const participantes = ["millie","Magnata","Luiza","Claubs"];
+const participantes = ["millie","Magnata","Luiza","Claubs","Pepsi","Ana mary"];
 
 let votoSelecionado = null;
 let fotoSelecionada = null;
