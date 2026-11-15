@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade Portal</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  font-family: Arial, sans-serif;
+  color: white;
+  background: radial-gradient(circle at top, #29213e, #15121f 60%, #0d0b13);
+}
+
+.shell {
+  width: min(100%, 470px);
+  padding: 30px;
+  border: 1px solid #403651;
+  border-radius: 22px;
+  background: #1b1627;
+  box-shadow: 0 24px 70px #0006;
+}
+
+h1 {
+  margin-top: 0;
+}
+
+.hint {
+  color: #b9b0c8;
+  margin-bottom: 24px;
+}
+
+label {
+  display: block;
+  margin-bottom: 9px;
+  font-weight: bold;
+}
+
+.entry {
+  display: flex;
+  gap: 9px;
+}
+
+input {
+  flex: 1;
+  min-width: 0;
+  padding: 14px;
+  color: white;
+  background: #171321;
+  border: 1px solid #55476a;
+  border-radius: 11px;
+  font-size: 16px;
+}
+
+button {
+  padding: 0 18px;
+  border: none;
+  border-radius: 11px;
+  background: #a879e8;
+  color: #170e24;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#message {
+  min-height: 22px;
+  margin-top: 13px;
+  color: #ff7777;
+}
+
+#result {
+  display: none;
+  margin-top: 25px;
+  padding: 23px 18px;
+  border: 1px solid #493b5b;
+  border-radius: 17px;
+  background: #211a30;
+  text-align: center;
+}
+
+#result h2 {
+  margin: 0 0 18px;
+  font-size: 26px;
+}
+
+.grade {
+  display: inline-grid;
+  place-items: center;
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  background: #e34b55;
+  color: white;
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.grade-caption {
+  color: #c5bbd1;
+  margin-bottom: 25px;
+}
+
+.judges {
+  max-width: 290px;
+  margin: 0 auto 17px;
+  line-height: 1.45;
+  font-weight: bold;
+}
+
+.balls {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+}
+
+.ball {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #e34b55;
+  box-shadow: 0 3px 13px #e34b5555;
+}
+
+.tab-label {
+  display: inline-block;
+  margin-bottom: 15px;
+  color: #c5a5f2;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.7px;
+}
+
+@media (max-width: 390px) {
+  .shell {
+    padding: 23px 18px;
+  }
+
+  .entry {
+    flex-direction: column;
+  }
+
+  button {
+    min-height: 46px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<main class="shell">
+
+  <h1>Grade Portal</h1>
+
+  <p class="hint">
+    Enter your access code to see your result.
+  </p>
+
+  <form id="codeForm">
+
+    <label for="accessCode">Access code</label>
+
+    <div class="entry">
+      <input
+        id="accessCode"
+        type="text"
+        placeholder="Enter your code"
+        autocomplete="off"
+      >
+
+      <button type="submit">Open</button>
+    </div>
+
+  </form>
+
+  <p id="message"></p>
+
+  <section id="result">
+
+    <span class="tab-label">Your result</span>
+
+    <h2>soy maserati</h2>
+
+    <div class="grade" id="grade">4</div>
+
+    <p class="grade-caption">Your grade</p>
+
+    <p class="judges">
+      you didn't get a good grade from any of the judges
+    </p>
+
+    <div class="balls">
+      <span class="ball"></span>
+      <span class="ball"></span>
+      <span class="ball"></span>
+    </div>
+
+  </section>
+
+</main>
+
+<script>
+
+const CORRECT_CODE = "2k8s5";
+
+const form = document.getElementById("codeForm");
+const input = document.getElementById("accessCode");
+const message = document.getElementById("message");
+const result = document.getElementById("result");
+
+form.addEventListener("submit", function(event) {
+
+  event.preventDefault();
+
+  if (input.value.trim() === CORRECT_CODE) {
+
+    message.textContent = "";
+    result.style.display = "block";
+
+  } else {
+
+    result.style.display = "none";
+    message.textContent = "your code is incorrect";
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>
